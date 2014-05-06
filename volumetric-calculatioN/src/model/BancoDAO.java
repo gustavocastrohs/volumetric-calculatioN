@@ -1,76 +1,71 @@
-
 package model;
 
-import java.awt.List;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  * @author
  */
-public class BancoDAO implements IBancoDAO{
+public class BancoDAO implements IBancoDAO {
+
     // Inicialização e conexão com o Banco Oracle
     private static String driverName; // = "oracle.jdbc.driver.OracleDriver";
-    private static String url       ; // = "jdbc:oracle:thin:@" + server + ":" + porta + ":" + sid;
-    
+    private static String url; // = "jdbc:oracle:thin:@" + server + ":" + porta + ":" + sid;
+
     // Dados do Servidor
     private static String server; // = "camburi.pucrs.br";
     private static int porta; // = "1521";
-    private static String sid       ; // = "facin11g";
-    private static String username  ; // = "login";
-    private static String password  ; // = "senha";
-    private static BancoDAO instancia;
+    private static String sid; // = "facin11g";
+    private static String username; // = "login";
+    private static String password; // = "senha";
+//    private static BancoDAO instancia;
     private static Connection conexao;
-    
-    
-    public static BancoDAO novaConexao(
-            String username,
-            String password,
-            String server,
-            String porta,
-            String sid
-            ) throws BancoDAOExcepiton {
+    private static boolean primeiraVez = true;
+
+    /*  
+     public static BancoDAO novaConexao(
+     String username,
+     String password,
+     String server,
+     String porta,
+     String sid
+     ) throws BancoDAOExcepiton {
         
             
-            instancia = new BancoDAO(username, password, server, porta, sid);
+     instancia = new BancoDAO(username, password, server, porta, sid);
 
         
-        return instancia;
-    }
-    
-    
-    private BancoDAO(
+     return instancia;
+     }
+     */
+    public BancoDAO(
             String username,
             String password,
             String server,
             String porta2,
             String sid
-            
-
-    ) throws BancoDAOExcepiton{
+    ) throws BancoDAOExcepiton {
         driverName = "oracle.jdbc.driver.OracleDriver";
-        url        = "jdbc:oracle:thin:@";
+        url = "jdbc:oracle:thin:@";
         this.username = username;
-        this.password= password;
+        this.password = password;
         this.porta = Integer.parseInt(porta2);
-        this.server=server;
-        this.sid=sid;
+        this.server = server;
+        this.sid = sid;
         try {
             Class.forName(driverName);
         } catch (ClassNotFoundException ex) {
             throw new BancoDAOExcepiton("JdbcOdbDriver not found!!");
         }
       //  boolean verificaSeExisteATabela = verificaSeExisteATabela();
-     //   if (verificaSeExisteATabela){
+        //   if (verificaSeExisteATabela){
         //cria instancia de tableas;
-    //    }
+        //    }
     }
 
     public String getServer() {
@@ -117,85 +112,112 @@ public class BancoDAO implements IBancoDAO{
      *
      * @return
      */
-
-        public Connection getConnection() throws BancoDAOExcepiton  {
-            url=url + server + ":" + porta + ":" + sid;
+    private Connection getConnection() throws BancoDAOExcepiton {
+        if (primeiraVez) {
+            url = url + server + ":" + porta + ":" + sid;
+            primeiraVez = false;
+        }
         try {
-            conexao  =  DriverManager.getConnection(url, username, password);
+            conexao = DriverManager.getConnection(url, username, password);
             return conexao;
         } catch (SQLException ex) {
-            throw  new BancoDAOExcepiton(ex.getMessage());
+            throw new BancoDAOExcepiton(ex.getMessage());
         }
-  
+
     }
 
-    
-    
     @Override
-    public ArrayList<Owner> buscaListaDeOwners() throws BancoDAOExcepiton {
+    public ArrayList<IOwner> buscaListaDeOwners() throws BancoDAOExcepiton {
 
         String sql;
         sql = "select distinct(OWNER) from ALL_TABLES a order by OWNER";
 
         String resultado = "";
-        ArrayList<Owner> l = new ArrayList<Owner>();
+        ArrayList<IOwner> l = new ArrayList<IOwner>();
         try {
 
             try (Connection con = getConnection()) {
                 Statement sta = con.createStatement();
                 ResultSet res = sta.executeQuery(sql);
-                
+
                 while (res.next()) {
-                   String s=  res.getString(1);
-                 //  int i = res.getInt(2);
+                    String s = res.getString(1);
+                    //  int i = res.getInt(2);
                     l.add(new Owner(s));
                 }
                 res.close();
                 sta.close();
             }
-            
+
         } catch (SQLException ex) {
-            
+
         }
-    return l;
+        return l;
     }
-    
-    
-    
 
- @Override
-    public ArrayList<Table> buscaListaDeTabelasDoOwner(Owner o) throws BancoDAOExcepiton {
-    ArrayList<Table> l = new ArrayList<Table>();
-        if (o !=null){
-        String sql;
-             sql = "select table_name,"
-             + "column_name,"
-             + "data_type,"
-             + "data_length,"
-             + "data_precision,"
-             + "nullable"
-             + "from ALL_TAB_COLUMNS where owner = '"+o.getNome()+"'";
+    @Override
+    public ArrayList<Table> buscaListaDeTabelasDoOwnerComOsDados(Owner o) throws BancoDAOExcepiton {
+        ArrayList<Table> l = new ArrayList<Table>();
+        if (o != null) {
+            String sql;
+            sql = "select table_name,"
+                    + "column_name,"
+                    + "data_type,"
+                    + "data_length,"
+                    + "data_precision,"
+                    + "nullable"
+                    + "from ALL_TAB_COLUMNS where owner = '" + o.getNome() + "'";
 
-        String resultado = "";
-        
-        try {
+            String resultado = "";
 
-            try (Connection con = getConnection()) {
-                Statement sta = con.createStatement();
-                ResultSet res = sta.executeQuery(sql);
-                
-                while (res.next()) {
-                 
-               //     l.add(new Table(res.getString(1),res.getString(2),res.getString(3),res.getInt(4),res.getInt(5),res.getString(6)));
+            try {
+
+                try (Connection con = getConnection()) {
+                    Statement sta = con.createStatement();
+                    ResultSet res = sta.executeQuery(sql);
+
+                    while (res.next()) {
+
+                        //     l.add(new Table(res.getString(1),res.getString(2),res.getString(3),res.getInt(4),res.getInt(5),res.getString(6)));
+                    }
+                    res.close();
+                    sta.close();
                 }
-                res.close();
-                sta.close();
+
+            } catch (SQLException ex) {
+
             }
-            
-        } catch (SQLException ex) {
-            
         }
+        return l;
     }
-    return l;
+
+    @Override
+    public ArrayList<String> buscaListaDeTabelasDoOwner(IOwner o) throws BancoDAOExcepiton {
+        ArrayList<String> l = new ArrayList<String>();
+        if (o != null) {
+            String sql;
+            sql = "select TABLE_NAME from ALL_TABLES where owner ='" + o.getNome() + "'";
+
+            String resultado = "";
+
+            try {
+
+                try (Connection con = getConnection()) {
+                    Statement sta = con.createStatement();
+                    ResultSet res = sta.executeQuery(sql);
+
+                    while (res.next()) {
+
+                        l.add(res.getString("TABLE_NAME"));
+                    }
+                    res.close();
+                    sta.close();
+                }
+
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            }
+        }
+        return l;
     }
 }

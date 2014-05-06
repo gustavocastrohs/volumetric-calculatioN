@@ -6,12 +6,9 @@
 
 package viewcontroller;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import model.BancoDAO;
 import model.BancoDAOExcepiton;
-import model.IBancoDAO;
 
 /**
  *
@@ -144,8 +141,9 @@ public class LoginForm extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         BancoDAO novaConexao = null;
+        Configuracoes config = Configuracoes.getInstancia();
         try {
-            novaConexao = BancoDAO.novaConexao(jt_user.getText(),jt_pass.getText(),jt_host.getText(),jt_port.getText(),jt_sid.getText());
+            novaConexao = new BancoDAO (jt_user.getText(),jt_pass.getText(),jt_host.getText(),jt_port.getText(),jt_sid.getText());
             
         } catch (BancoDAOExcepiton ex) {
          
@@ -156,6 +154,7 @@ public class LoginForm extends javax.swing.JFrame {
         }
         else{
             //novaConexao
+            config.setBaseDeDados(novaConexao);
             OwnerSelectionForm e = new OwnerSelectionForm();
             e.setVisible(true);
             setVisible(false);            

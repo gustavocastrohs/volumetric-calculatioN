@@ -7,9 +7,12 @@
 package viewcontroller;
 
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
-import model.BancoDAO;
+import javax.swing.DefaultListModel;
 import model.BancoDAOExcepiton;
+import model.IBancoDAO;
 import model.IOwner;
 import model.Owner;
 
@@ -22,14 +25,13 @@ public class OwnerSelectionForm extends javax.swing.JFrame {
     /**
      * Creates new form OwnerSelectionForm
      */
-    private BancoDAO baseDefault;
+
     public OwnerSelectionForm() {
         initComponents();
+        populaAComboBox();
+
     }
-        public OwnerSelectionForm(BancoDAO base) {
-        initComponents();
-        baseDefault = base;
-    }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -43,8 +45,8 @@ public class OwnerSelectionForm extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jComboBox1 = new javax.swing.JComboBox();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jList1 = new javax.swing.JList();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -58,10 +60,18 @@ public class OwnerSelectionForm extends javax.swing.JFrame {
         });
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
+        jComboBox1.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jComboBox1FocusLost(evt);
+            }
+        });
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        jScrollPane2.setViewportView(jList1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -70,11 +80,11 @@ public class OwnerSelectionForm extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 320, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addGap(26, 26, 26)
-                        .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jComboBox1, 0, 262, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jButton1)))
@@ -90,8 +100,8 @@ public class OwnerSelectionForm extends javax.swing.JFrame {
                     .addComponent(jLabel1)
                     .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(22, Short.MAX_VALUE))
         );
 
         pack();
@@ -106,6 +116,16 @@ public class OwnerSelectionForm extends javax.swing.JFrame {
       ef.setVisible(true);
         setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jComboBox1FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jComboBox1FocusLost
+        // TODO add your handling code here:
+        populaLista();
+    }//GEN-LAST:event_jComboBox1FocusLost
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        // TODO add your handling code here:
+         populaLista();
+    }//GEN-LAST:event_jComboBox1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -146,22 +166,46 @@ public class OwnerSelectionForm extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JComboBox jComboBox1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JList jList1;
+    private javax.swing.JScrollPane jScrollPane2;
     // End of variables declaration//GEN-END:variables
 
-public void populaAComboBox() throws BancoDAOExcepiton{
-    DefaultComboBoxModel model = new DefaultComboBoxModel();
-    
-       
-     ArrayList<Owner> buscaDadosOwner = baseDefault.buscaListaDeOwners();
-    for (int i=0;i<buscaDadosOwner.size();i++ )
-    {
-      model.addElement(buscaDadosOwner.get(i));
-    }
+public void populaAComboBox() {
+        try {
+            DefaultComboBoxModel model = new DefaultComboBoxModel();
+            Configuracoes conf = Configuracoes.getInstancia();
+            IBancoDAO base = conf.getBaseDeDados();
+            ArrayList<IOwner> buscaDadosOwner = base.buscaListaDeOwners();
+            for (int i=0;i<buscaDadosOwner.size();i++ )
+            {
+                model.addElement(buscaDadosOwner.get(i));
+            }
+            
+            jComboBox1.setModel(model);
+        } catch (BancoDAOExcepiton ex) {
+         //   Logger.getLogger(OwnerSelectionForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
-jComboBox1.setModel(model);
+}
 
+
+public void populaLista(){
+
+    try {
+            DefaultListModel model = new DefaultListModel();
+            Configuracoes conf = Configuracoes.getInstancia();
+            IBancoDAO base = conf.getBaseDeDados();
+            IOwner owner = (IOwner)jComboBox1.getSelectedItem();
+            ArrayList<String> buscaDadosOwner = base.buscaListaDeTabelasDoOwner(owner);
+            for (int i=0;i<buscaDadosOwner.size();i++ )
+            {
+                model.addElement(buscaDadosOwner.get(i));
+            }
+            
+            jList1.setModel(model);
+        } catch (BancoDAOExcepiton ex) {
+            Logger.getLogger(OwnerSelectionForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
 }
 
 }
