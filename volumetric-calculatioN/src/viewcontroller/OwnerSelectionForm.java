@@ -14,6 +14,7 @@ import javax.swing.DefaultListModel;
 import model.BancoDAOExcepiton;
 import model.IBancoDAO;
 import model.IOwner;
+import model.ITable;
 import model.Owner;
 
 /**
@@ -217,7 +218,7 @@ public void populaLista(){
             Configuracoes conf = Configuracoes.getInstancia();
             IBancoDAO base = conf.getBaseDeDados();
             IOwner owner = (IOwner)jComboBox1.getSelectedItem();
-            ArrayList<String> buscaDadosOwner = base.buscaListaDeTabelasDoOwner(owner);
+            ArrayList<ITable> buscaDadosOwner = base.buscaListaDeTabelasDoOwner(owner);
             for (int i=0;i<buscaDadosOwner.size();i++ )
             {
                 model.addElement(buscaDadosOwner.get(i));

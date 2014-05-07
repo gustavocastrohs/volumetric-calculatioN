@@ -19,5 +19,5 @@ public interface ITable {
 
     public void setTable_name(String table_name);
       
- 
+    
 }

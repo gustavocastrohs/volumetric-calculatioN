@@ -14,6 +14,13 @@ package model;
  */
 public class Table implements ITable{
     private String table_name;
+
+    public Table(String table_name) {
+        this.table_name = table_name;
+    }
+
+    public Table() {
+    }
     
       
     
@@ -26,6 +33,9 @@ public class Table implements ITable{
     public void setTable_name(String table_name) {
         this.table_name = table_name;
     }
-
+    public String toString(){
+    
+    return table_name;
+    }
     
 }

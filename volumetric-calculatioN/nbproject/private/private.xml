@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/C:/Users/09201801/Documents/GitHub/volumetric-calculatioN/volumetric-calculatioN/src/model/IBancoDAO.java</file>
+            <file>file:/C:/Users/09201801/Documents/GitHub/volumetric-calculatioN/volumetric-calculatioN/src/viewcontroller/EstimationForm.java</file>
+            <file>file:/C:/Users/09201801/Documents/GitHub/volumetric-calculatioN/volumetric-calculatioN/src/model/BancoDAO.java</file>
+            <file>file:/C:/Users/09201801/Documents/GitHub/volumetric-calculatioN/volumetric-calculatioN/src/viewcontroller/Configuracoes.java</file>
+        </group>
     </open-files>
 </project-private>

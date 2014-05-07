@@ -15,7 +15,10 @@ import javax.swing.DefaultListModel;
 import javax.swing.table.DefaultTableModel;
 import model.BancoDAOExcepiton;
 import model.IBancoDAO;
+import model.IColumn;
 import model.IOwner;
+import model.ITable;
+import model.Owner;
 
 
 /**
@@ -78,6 +81,14 @@ public class EstimationForm extends javax.swing.JFrame {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
+        });
+        jList1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jList1MouseClicked(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jList1MouseReleased(evt);
+            }
         });
         jScrollPane1.setViewportView(jList1);
 
@@ -236,6 +247,17 @@ public class EstimationForm extends javax.swing.JFrame {
         populaOsCamposInicias();
     }//GEN-LAST:event_formWindowActivated
 
+    private void jList1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jList1MouseClicked
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_jList1MouseClicked
+
+    private void jList1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jList1MouseReleased
+        // TODO add your handling code here:
+        setaNomeDaTabelaNaLabel();
+        populaTabelaComDadosDaITable();
+    }//GEN-LAST:event_jList1MouseReleased
+
     /**
      * @param args the command line arguments
      */
@@ -309,7 +331,7 @@ public void populaLista(){
             Configuracoes conf = Configuracoes.getInstancia();
             IBancoDAO base = conf.getBaseDeDados();
             IOwner owner = (IOwner)conf.getOwnerAtual();
-            ArrayList<String> buscaDadosOwner = base.buscaListaDeTabelasDoOwner(owner);
+            ArrayList<ITable> buscaDadosOwner = base.buscaListaDeTabelasDoOwner(owner);
             for (int i=0;i<buscaDadosOwner.size();i++ )
             {
                 model.addElement(buscaDadosOwner.get(i));
@@ -333,4 +355,32 @@ model.addColumn("nullable");
 
 jTable1.setModel(model);
 }
+
+public void setaNomeDaTabelaNaLabel(){
+    ITable t = (ITable) jList1.getSelectedValue();
+    jLabel7.setText(t.toString());
+
+}
+
+public void populaTabelaComDadosDaITable(){
+        try {
+            DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+            Configuracoes conf = Configuracoes.getInstancia();
+            IBancoDAO base = conf.getBaseDeDados();
+            ArrayList<IColumn> buscaListaDeTabelasDoOwnerComOsDados = base.buscaListaDeTabelasDoOwnerComOsDados(conf.getOwnerAtual(),(ITable) jList1.getSelectedValue() );
+            for (IColumn coluna : buscaListaDeTabelasDoOwnerComOsDados){
+
+
+            model.addRow(new Object[]{coluna.getColumn_name(),coluna.getData_type(),coluna.getData_length(),coluna.getData_length(),coluna.getData_precision(),coluna.getNullable()});
+            jTable1.setModel(model);
+            }
+        } catch (BancoDAOExcepiton ex) {
+            Logger.getLogger(EstimationForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+
+}
+
+
+
 }

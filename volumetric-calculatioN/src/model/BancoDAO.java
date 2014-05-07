@@ -156,44 +156,42 @@ public class BancoDAO implements IBancoDAO {
     }
 
     @Override
-    public ArrayList<Table> buscaListaDeTabelasDoOwnerComOsDados(Owner o) throws BancoDAOExcepiton {
-        ArrayList<Table> l = new ArrayList<Table>();
-        if (o != null) {
-            String sql;
-            sql = "select table_name,"
-                    + "column_name,"
-                    + "data_type,"
-                    + "data_length,"
-                    + "data_precision,"
-                    + "nullable"
-                    + "from ALL_TAB_COLUMNS where owner = '" + o.getNome() + "'";
-
-            String resultado = "";
-
-            try {
-
+    public ArrayList<IColumn> buscaListaDeTabelasDoOwnerComOsDados(IOwner owner,ITable tabela) throws BancoDAOExcepiton {
+        ArrayList<IColumn> l = new ArrayList<IColumn>();
+        if (tabela!=null ) {
+            if (null != owner) {
+                String sql;
+                sql = "select table_name,"
+                        + "column_name,"
+                        + "data_type,"
+                        + "data_length,"
+                        + "data_precision,"
+                        + "nullable"
+                        + "from ALL_TAB_COLUMNS where  table_name='"+tabela.getTable_name()+"' and owner = '" + owner.getNome() + "'";
+                
+                String resultado = "";
                 try (Connection con = getConnection()) {
                     Statement sta = con.createStatement();
                     ResultSet res = sta.executeQuery(sql);
-
+                    
                     while (res.next()) {
-
-                        //     l.add(new Table(res.getString(1),res.getString(2),res.getString(3),res.getInt(4),res.getInt(5),res.getString(6)));
+                        
+                        l.add(new Column(res.getString(1),res.getString(2),res.getInt(3),res.getInt(4),res.getString(5)));
                     }
                     res.close();
                     sta.close();
+                }catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+                
                 }
-
-            } catch (SQLException ex) {
-
             }
         }
         return l;
     }
 
     @Override
-    public ArrayList<String> buscaListaDeTabelasDoOwner(IOwner o) throws BancoDAOExcepiton {
-        ArrayList<String> l = new ArrayList<String>();
+    public ArrayList<ITable> buscaListaDeTabelasDoOwner(IOwner o) throws BancoDAOExcepiton {
+        ArrayList<ITable> l = new ArrayList<ITable>();
         if (o != null) {
             String sql;
             sql = "select TABLE_NAME from ALL_TABLES where owner ='" + o.getNome() + "'";
@@ -208,7 +206,7 @@ public class BancoDAO implements IBancoDAO {
 
                     while (res.next()) {
 
-                        l.add(res.getString("TABLE_NAME"));
+                        l.add(new Table(res.getString("TABLE_NAME")));
                     }
                     res.close();
                     sta.close();
