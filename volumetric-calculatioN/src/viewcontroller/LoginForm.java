@@ -45,6 +45,9 @@ public class LoginForm extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jt_host = new javax.swing.JTextField();
 
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setTitle("Login");
+
         jLabel4.setText("Port:");
 
         jLabel2.setText("Password:");
@@ -155,6 +158,7 @@ public class LoginForm extends javax.swing.JFrame {
         else{
             //novaConexao
             config.setBaseDeDados(novaConexao);
+            config.setUsuarioLogado(jt_user.getText());
             OwnerSelectionForm e = new OwnerSelectionForm();
             e.setVisible(true);
             setVisible(false);            

@@ -7,6 +7,13 @@
 package viewcontroller;
 
 
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
+import javax.swing.table.DefaultTableModel;
+import model.BancoDAOExcepiton;
 import model.IBancoDAO;
 import model.IOwner;
 
@@ -59,7 +66,13 @@ public class EstimationForm extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
 
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Estimativas");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                formWindowActivated(evt);
+            }
+        });
 
         jList1.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -215,7 +228,13 @@ public class EstimationForm extends javax.swing.JFrame {
         OwnerSelectionForm os = new OwnerSelectionForm();
         os.setVisible(true);
         setVisible(false);
+        
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+        // TODO add your handling code here:
+        populaOsCamposInicias();
+    }//GEN-LAST:event_formWindowActivated
 
     /**
      * @param args the command line arguments
@@ -271,4 +290,47 @@ public class EstimationForm extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     // End of variables declaration//GEN-END:variables
+
+public  void populaOsCamposInicias(){
+Configuracoes conf = Configuracoes.getInstancia();
+jLabel1.setText(conf.getOwnerAtual().getNome());
+populaLista();
+tabelaColunasIniciais();
+}
+
+
+
+
+
+public void populaLista(){
+
+    try {
+            DefaultListModel model = new DefaultListModel();
+            Configuracoes conf = Configuracoes.getInstancia();
+            IBancoDAO base = conf.getBaseDeDados();
+            IOwner owner = (IOwner)conf.getOwnerAtual();
+            ArrayList<String> buscaDadosOwner = base.buscaListaDeTabelasDoOwner(owner);
+            for (int i=0;i<buscaDadosOwner.size();i++ )
+            {
+                model.addElement(buscaDadosOwner.get(i));
+            }
+            
+            jList1.setModel(model);
+        } catch (BancoDAOExcepiton ex) {
+            Logger.getLogger(OwnerSelectionForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+}
+
+
+public void tabelaColunasIniciais(){
+DefaultTableModel model = new DefaultTableModel();
+model.addColumn("column_name");
+model.addColumn("data_type");
+model.addColumn("data_length");
+model.addColumn("data_precision");
+model.addColumn("nullable");
+    
+
+jTable1.setModel(model);
+}
 }
