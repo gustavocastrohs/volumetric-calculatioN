@@ -6,7 +6,6 @@
 
 package viewcontroller;
 
-import model.BancoDAO;
 import model.IBancoDAO;
 import model.IOwner;
 

@@ -45,7 +45,7 @@ public class LoginForm extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jt_host = new javax.swing.JTextField();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Login");
 
         jLabel4.setText("Port:");

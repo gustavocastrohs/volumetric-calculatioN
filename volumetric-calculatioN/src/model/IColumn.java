@@ -20,13 +20,13 @@ public interface IColumn {
 
     public void setData_type(String data_type);
 
-    public int getData_length();
+    public String getData_length();
 
-    public void setData_length(int data_length);
+    public void setData_length(String data_length);
 
-    public int getData_precision();
+    public String getData_precision();
 
-    public void setData_precision(int data_precision);
+    public void setData_precision(String data_precision);
 
     public String getNullable();
 

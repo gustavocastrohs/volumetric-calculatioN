@@ -5,12 +5,6 @@
  */
 package model;
 
-import model.BancoDAOExcepiton;
-import model.Owner;
-
-import java.awt.List;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**

@@ -161,13 +161,13 @@ public class BancoDAO implements IBancoDAO {
         if (tabela!=null ) {
             if (null != owner) {
                 String sql;
-                sql = "select table_name,"
+                sql = "select "
                         + "column_name,"
                         + "data_type,"
                         + "data_length,"
                         + "data_precision,"
                         + "nullable"
-                        + "from ALL_TAB_COLUMNS where  table_name='"+tabela.getTable_name()+"' and owner = '" + owner.getNome() + "'";
+                        + " from ALL_TAB_COLUMNS where  table_name='"+tabela.getTable_name()+"' and owner = '" + owner.getNome() + "'";
                 
                 String resultado = "";
                 try (Connection con = getConnection()) {
@@ -175,8 +175,31 @@ public class BancoDAO implements IBancoDAO {
                     ResultSet res = sta.executeQuery(sql);
                     
                     while (res.next()) {
+                        //column_name
+                        Column column = new Column();
+                        String string1 = res.getString(1);
+                        if (string1!=null && !string1.equalsIgnoreCase(""))
+                            column.setColumn_name(string1);
+                        //data_type
+                        String string2 = res.getString(2);
+                        if (string2!=null && !string2.equalsIgnoreCase(""))
+                            column.setData_type(string2);
+                        String string3 = res.getString(3);
+                        //data_length
+                        if (string3!=null && !string3.equalsIgnoreCase(""))
+                            column.setData_length(string3);
+                        String string4 = res.getString(4);
+                        //data_precision
+                        if (string4!=null && !string4.equalsIgnoreCase(""))
+                            column.setData_precision(string4);
+                        //nullable
+                        String string5 = res.getString(5);
+                        if (string5!=null && !string5.equalsIgnoreCase(""))
+
+                            column.setNullable(string5);
                         
-                        l.add(new Column(res.getString(1),res.getString(2),res.getInt(3),res.getInt(4),res.getString(5)));
+                        
+                        l.add(column);
                     }
                     res.close();
                     sta.close();

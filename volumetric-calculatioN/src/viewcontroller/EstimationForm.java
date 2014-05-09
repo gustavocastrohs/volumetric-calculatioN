@@ -371,7 +371,7 @@ public void populaTabelaComDadosDaITable(){
             for (IColumn coluna : buscaListaDeTabelasDoOwnerComOsDados){
 
 
-            model.addRow(new Object[]{coluna.getColumn_name(),coluna.getData_type(),coluna.getData_length(),coluna.getData_length(),coluna.getData_precision(),coluna.getNullable()});
+            model.addRow(new Object[]{coluna.getColumn_name(),coluna.getData_type(),coluna.getData_length(),coluna.getData_precision(),coluna.getNullable()});
             jTable1.setModel(model);
             }
         } catch (BancoDAOExcepiton ex) {

@@ -14,11 +14,14 @@ public class Column implements IColumn{
     
     private String column_name;
     private String data_type;
-    private int data_length;
-    private int data_precision;
+    private String data_length;
+    private String data_precision;
     private String nullable;
 
-    public Column(String column_name, String data_type, int data_length, int data_precision, String nullable) {
+    public Column() {
+    }
+
+    public Column(String column_name, String data_type, String data_length, String data_precision, String nullable) {
         this.column_name = column_name;
         this.data_type = data_type;
         this.data_length = data_length;
@@ -26,16 +29,6 @@ public class Column implements IColumn{
         this.nullable = nullable;
     }
 
-    public Column() {
-    }
-
-    public Column(String column_name) {
-        this.column_name = column_name;
-    }
-    
-    
-    
-    
     public String getColumn_name() {
         return column_name;
     }
@@ -52,19 +45,19 @@ public class Column implements IColumn{
         this.data_type = data_type;
     }
 
-    public int getData_length() {
+    public String getData_length() {
         return data_length;
     }
 
-    public void setData_length(int data_length) {
+    public void setData_length(String data_length) {
         this.data_length = data_length;
     }
 
-    public int getData_precision() {
+    public String getData_precision() {
         return data_precision;
     }
 
-    public void setData_precision(int data_precision) {
+    public void setData_precision(String data_precision) {
         this.data_precision = data_precision;
     }
 
@@ -75,7 +68,6 @@ public class Column implements IColumn{
     public void setNullable(String nullable) {
         this.nullable = nullable;
     }
-
 
     
 }
