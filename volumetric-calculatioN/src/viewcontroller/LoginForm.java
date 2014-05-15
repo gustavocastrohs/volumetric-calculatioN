@@ -159,11 +159,12 @@ public class LoginForm extends javax.swing.JFrame {
         }
 
         try {
-            DefaultComboBoxModel model = new DefaultComboBoxModel();
+            
 
             IBancoDAO base = config.getBaseDeDados();
             ArrayList<IOwner> buscaDadosOwner = base.buscaListaDeOwners();
             //novaConexao
+            IBancoDAO base = conf.getBaseDeDados();
             config.setBaseDeDados(novaConexao);
             config.setUsuarioLogado(jt_user.getText());
 
