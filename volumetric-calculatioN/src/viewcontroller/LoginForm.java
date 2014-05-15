@@ -3,12 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package viewcontroller;
 
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import model.BancoDAO;
 import model.BancoDAOExcepiton;
+import model.IBancoDAO;
+import model.IOwner;
 
 /**
  *
@@ -145,26 +150,35 @@ public class LoginForm extends javax.swing.JFrame {
         // TODO add your handling code here:
         BancoDAO novaConexao = null;
         Configuracoes config = Configuracoes.getInstancia();
+        boolean noError = true;
         try {
-            novaConexao = new BancoDAO (jt_user.getText(),jt_pass.getText(),jt_host.getText(),jt_port.getText(),jt_sid.getText());
-            
-        
+            novaConexao = new BancoDAO(jt_user.getText(), jt_pass.getText(), jt_host.getText(), jt_port.getText(), jt_sid.getText());
 
-        if ( novaConexao == null){
-            JOptionPane.showMessageDialog(this, "ERRO NA CONEXÃO");
+        } catch (BancoDAOExcepiton ex) {
+
         }
-        else{
+
+        try {
+            DefaultComboBoxModel model = new DefaultComboBoxModel();
+
+            IBancoDAO base = config.getBaseDeDados();
+            ArrayList<IOwner> buscaDadosOwner = base.buscaListaDeOwners();
             //novaConexao
             config.setBaseDeDados(novaConexao);
             config.setUsuarioLogado(jt_user.getText());
+
             OwnerSelectionForm e = new OwnerSelectionForm();
             e.setVisible(true);
-            setVisible(false);            
-}
+            setVisible(false);
         } catch (BancoDAOExcepiton ex) {
-         
+            JOptionPane.showMessageDialog(this, "ERRO NA CONEXÃO");
+        } catch (NullPointerException ep) {
+
+            JOptionPane.showMessageDialog(this, "ERRO NA CONEXÃO");
+
         }
-    
+
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jt_hostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jt_hostActionPerformed
