@@ -31,4 +31,8 @@ public interface IColumn {
     public String getNullable();
 
     public void setNullable(String nullable); 
+    public Double getTamanhoMedioEstimado();
+     public void setTamanhoMedioEstimado(Double tamanhoMedioEstimado);
+      public Double getPercentualDeLinhasNulas();
+        public void setPercentualDeLinhasNulas(Double percentualDeLinhasNulas);
 }

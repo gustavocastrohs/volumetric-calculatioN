@@ -148,9 +148,7 @@ public class LoginForm extends javax.swing.JFrame {
         try {
             novaConexao = new BancoDAO (jt_user.getText(),jt_pass.getText(),jt_host.getText(),jt_port.getText(),jt_sid.getText());
             
-        } catch (BancoDAOExcepiton ex) {
-         
-        }
+        
 
         if ( novaConexao == null){
             JOptionPane.showMessageDialog(this, "ERRO NA CONEXÃO");
@@ -163,6 +161,10 @@ public class LoginForm extends javax.swing.JFrame {
             e.setVisible(true);
             setVisible(false);            
 }
+        } catch (BancoDAOExcepiton ex) {
+         
+        }
+    
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jt_hostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jt_hostActionPerformed

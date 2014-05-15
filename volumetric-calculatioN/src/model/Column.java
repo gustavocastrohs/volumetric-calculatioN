@@ -17,6 +17,8 @@ public class Column implements IColumn{
     private String data_length;
     private String data_precision;
     private String nullable;
+    private Double tamanhoMedioEstimado;
+    private Double percentualDeLinhasNulas;
 
     public Column() {
     }
@@ -27,6 +29,22 @@ public class Column implements IColumn{
         this.data_length = data_length;
         this.data_precision = data_precision;
         this.nullable = nullable;
+    }
+
+    public Double getTamanhoMedioEstimado() {
+        return tamanhoMedioEstimado;
+    }
+
+    public void setTamanhoMedioEstimado(Double tamanhoMedioEstimado) {
+        this.tamanhoMedioEstimado = tamanhoMedioEstimado;
+    }
+
+    public Double getPercentualDeLinhasNulas() {
+        return percentualDeLinhasNulas;
+    }
+
+    public void setPercentualDeLinhasNulas(Double percentualDeLinhasNulas) {
+        this.percentualDeLinhasNulas = percentualDeLinhasNulas;
     }
 
     public String getColumn_name() {

@@ -19,10 +19,12 @@ public class resultForm extends javax.swing.JFrame {
      */
     public resultForm() {
         initComponents();
+    this.setLocationRelativeTo(null);
     }
 
     resultForm(IOwner owner, String string) {
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**

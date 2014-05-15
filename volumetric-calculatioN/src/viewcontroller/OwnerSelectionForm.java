@@ -30,7 +30,7 @@ public class OwnerSelectionForm extends javax.swing.JFrame {
     public OwnerSelectionForm() {
         initComponents();
         populaAComboBox();
-
+this.setLocationRelativeTo(null);
     }
 
 
