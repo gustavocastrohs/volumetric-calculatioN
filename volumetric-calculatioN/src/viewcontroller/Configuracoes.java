@@ -6,8 +6,11 @@
 
 package viewcontroller;
 
+import java.util.ArrayList;
 import model.IBancoDAO;
+import model.IColumn;
 import model.IOwner;
+import model.ITable;
 
 /**
  *
@@ -34,6 +37,7 @@ public class Configuracoes {
     private IOwner ownerAtual;
     private String usuarioLogado;
     
+    
     public IOwner getOwnerAtual() {
         return ownerAtual;
     }
@@ -57,7 +61,41 @@ public class Configuracoes {
     public void setBaseDeDados(IBancoDAO baseDeDados) {
         this.baseDeDados = baseDeDados;
     }
- 
- 
- 
+    
+    public void setTabelasOwner (ArrayList<ITable> tabelas){
+    
+    this.ownerAtual.setListaDeTabelas(tabelas);
+             
+    }
+    
+    public ITable getOwnerTable(String tabela) {
+        ITable retorno = null;
+        for (ITable t : ownerAtual.getListaDeTabelas()) {
+            if (t.getTable_name().equalsIgnoreCase(tabela)) {
+                return t;
+            }
+
+        }
+        return retorno;
+    }
+    
+    public IColumn getColunaDaTabela(String tabela, String coluna) {
+        IColumn retorno = null;
+        ITable ownerTable = getOwnerTable(tabela);
+        for (IColumn c : ownerTable.getListaDeColunas()) {
+            if (c.getColumn_name().equalsIgnoreCase(coluna)) {
+                return c;
+
+            }
+
+        }
+
+        return retorno;
+    }
+    
+    public void setIColumnDaTabela(ArrayList<IColumn> buscaListaDeTabelasDoOwnerComOsDados,ITable t){
+        
+    
+    }
+
 }

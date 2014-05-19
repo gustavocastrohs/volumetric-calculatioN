@@ -6,6 +6,8 @@
 
 package model;
 
+import java.util.ArrayList;
+
 
 
 /**
@@ -15,6 +17,7 @@ package model;
 public class Owner implements IOwner{
     private String nome;
     private int id;
+    private ArrayList<ITable> listaDeTabelas;
 
     public Owner(String nome, int id) {
         this.nome = nome;
@@ -52,6 +55,15 @@ public class Owner implements IOwner{
     
     public String toString(){
         return nome;
+    }
+
+    public ArrayList<ITable> getListaDeTabelas() {
+        return listaDeTabelas;
+    }
+
+    public void setListaDeTabelas(ArrayList<ITable> listaDeTabelas) {
+        
+        this.listaDeTabelas = listaDeTabelas;
     }
     
 }

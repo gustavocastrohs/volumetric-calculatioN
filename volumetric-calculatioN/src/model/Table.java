@@ -6,6 +6,8 @@
 
 package model;
 
+import java.util.ArrayList;
+
 
 
 /**
@@ -14,7 +16,8 @@ package model;
  */
 public class Table implements ITable{
     private String table_name;
-
+    private ArrayList<IColumn> listaDeColunas;
+    
     public Table(String table_name) {
         this.table_name = table_name;
     }
@@ -37,5 +40,17 @@ public class Table implements ITable{
     
     return table_name;
     }
+
+    public ArrayList<IColumn> getListaDeColunas() {
+        return listaDeColunas;
+    }
+
+    public void setListaDeColunas(ArrayList<IColumn> listaDeColunas) {
+        this.listaDeColunas = listaDeColunas;
+    }
+
+ 
+    
+    
     
 }

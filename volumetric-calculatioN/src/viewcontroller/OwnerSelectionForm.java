@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package viewcontroller;
 
 import java.util.ArrayList;
@@ -26,13 +25,11 @@ public class OwnerSelectionForm extends javax.swing.JFrame {
     /**
      * Creates new form OwnerSelectionForm
      */
-
     public OwnerSelectionForm() {
         initComponents();
         populaAComboBox();
-this.setLocationRelativeTo(null);
+        this.setLocationRelativeTo(null);
     }
-
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -122,15 +119,15 @@ this.setLocationRelativeTo(null);
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        
+
         IOwner o = (IOwner) jComboBox1.getSelectedItem();
-        
+
         Configuracoes conf = Configuracoes.getInstancia();
         conf.setOwnerAtual(o);
         EstimationForm ef = new EstimationForm();
         ef.setVisible(true);
         setVisible(false);
-        
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jComboBox1FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jComboBox1FocusLost
@@ -140,7 +137,7 @@ this.setLocationRelativeTo(null);
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
         // TODO add your handling code here:
-         populaLista();
+        populaLista();
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -192,42 +189,39 @@ this.setLocationRelativeTo(null);
     private javax.swing.JScrollPane jScrollPane2;
     // End of variables declaration//GEN-END:variables
 
-public void populaAComboBox() {
+    public void populaAComboBox() {
         try {
             DefaultComboBoxModel model = new DefaultComboBoxModel();
             Configuracoes conf = Configuracoes.getInstancia();
             IBancoDAO base = conf.getBaseDeDados();
             ArrayList<IOwner> buscaDadosOwner = base.buscaListaDeOwners();
-            for (int i=0;i<buscaDadosOwner.size();i++ )
-            {
+            for (int i = 0; i < buscaDadosOwner.size(); i++) {
                 model.addElement(buscaDadosOwner.get(i));
             }
-            
+
             jComboBox1.setModel(model);
         } catch (BancoDAOExcepiton ex) {
-         //   Logger.getLogger(OwnerSelectionForm.class.getName()).log(Level.SEVERE, null, ex);
+            //   Logger.getLogger(OwnerSelectionForm.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-}
+    }
 
+    public void populaLista() {
 
-public void populaLista(){
-
-    try {
+        try {
             DefaultListModel model = new DefaultListModel();
             Configuracoes conf = Configuracoes.getInstancia();
             IBancoDAO base = conf.getBaseDeDados();
-            IOwner owner = (IOwner)jComboBox1.getSelectedItem();
+            IOwner owner = (IOwner) jComboBox1.getSelectedItem();
             ArrayList<ITable> buscaDadosOwner = base.buscaListaDeTabelasDoOwner(owner);
-            for (int i=0;i<buscaDadosOwner.size();i++ )
-            {
+            for (int i = 0; i < buscaDadosOwner.size(); i++) {
                 model.addElement(buscaDadosOwner.get(i));
             }
-            
+
             jList1.setModel(model);
         } catch (BancoDAOExcepiton ex) {
             Logger.getLogger(OwnerSelectionForm.class.getName()).log(Level.SEVERE, null, ex);
         }
-}
+    }
 
 }

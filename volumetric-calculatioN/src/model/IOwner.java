@@ -6,6 +6,8 @@
 
 package model;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author 09201801
@@ -21,4 +23,6 @@ public interface IOwner {
     public void setId(int id);
     
     public String toString();
+     public ArrayList<ITable> getListaDeTabelas();
+      public void setListaDeTabelas(ArrayList<ITable> listaDeTabelas);
 }

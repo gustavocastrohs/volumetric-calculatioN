@@ -6,6 +6,8 @@
 
 package model;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author 09201801
@@ -18,6 +20,7 @@ public interface ITable {
     public String getTable_name();
 
     public void setTable_name(String table_name);
-      
+    public ArrayList<IColumn> getListaDeColunas();
+    public void setListaDeColunas(ArrayList<IColumn> listaDeColunas);
     
 }

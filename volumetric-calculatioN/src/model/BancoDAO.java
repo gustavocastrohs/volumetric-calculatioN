@@ -113,12 +113,14 @@ public class BancoDAO implements IBancoDAO {
      * @return
      */
     private Connection getConnection() throws BancoDAOExcepiton {
+        /*
         if (primeiraVez) {
-            url = url + server + ":" + porta + ":" + sid;
+            url = ""+url + server + ":" + porta + ":" + sid;
             primeiraVez = false;
         }
+        */
         try {
-            conexao = DriverManager.getConnection(url, username, password);
+            conexao = DriverManager.getConnection(""+url + server + ":" + porta + ":" + sid+"", username, password);
             return conexao;
         } catch (SQLException ex) {
             throw new BancoDAOExcepiton(ex.getMessage());
@@ -204,7 +206,7 @@ public class BancoDAO implements IBancoDAO {
                     res.close();
                     sta.close();
                 }catch (SQLException ex) {
-                System.out.println(ex.getMessage());
+              //  System.out.println(ex.getMessage());
                 
                 }
             }
@@ -241,4 +243,41 @@ public class BancoDAO implements IBancoDAO {
         }
         return l;
     }
+    
+    
+    
+     public boolean testaConexão()  {
+        boolean ativo = false;
+
+            String sql;
+            sql = "select TABLE_NAME from ALL_TABLES ";
+
+            
+
+            try {
+
+                try (Connection con = getConnection()) {
+                    Statement sta = con.createStatement();
+                    ResultSet res = sta.executeQuery(sql);
+
+                    while (res.next()) {
+                        ativo = true;
+                       return true;
+                    }
+                    res.close();
+                    sta.close();
+                } catch (BancoDAOExcepiton ex){
+                return ativo;
+                }
+
+            } catch (SQLException ex) {
+                return ativo;
+            } 
+            
+            
+            
+            return ativo;
+        }
+       
+    
 }

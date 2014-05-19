@@ -8,7 +8,6 @@ package viewcontroller;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import model.BancoDAO;
 import model.BancoDAOExcepiton;
@@ -158,26 +157,21 @@ public class LoginForm extends javax.swing.JFrame {
 
         }
 
-        try {
+        if (novaConexao.testaConexão()){
+          
+               
+                config.setBaseDeDados(novaConexao);
+                config.setUsuarioLogado(jt_user.getText());
+                
+                OwnerSelectionForm e = new OwnerSelectionForm();
+                e.setVisible(true);
+                setVisible(false);
             
-
-            IBancoDAO base = config.getBaseDeDados();
-            ArrayList<IOwner> buscaDadosOwner = base.buscaListaDeOwners();
-            //novaConexao
-            IBancoDAO base = conf.getBaseDeDados();
-            config.setBaseDeDados(novaConexao);
-            config.setUsuarioLogado(jt_user.getText());
-
-            OwnerSelectionForm e = new OwnerSelectionForm();
-            e.setVisible(true);
-            setVisible(false);
-        } catch (BancoDAOExcepiton ex) {
+        }else{
+         
             JOptionPane.showMessageDialog(this, "ERRO NA CONEXÃO");
-        } catch (NullPointerException ep) {
-
-            JOptionPane.showMessageDialog(this, "ERRO NA CONEXÃO");
-
         }
+        
 
 
     }//GEN-LAST:event_jButton1ActionPerformed
