@@ -18,14 +18,14 @@ public class BancoDAO implements IBancoDAO {
     private static String url; // = "jdbc:oracle:thin:@" + server + ":" + porta + ":" + sid;
 
     // Dados do Servidor
-    private static String server; // = "camburi.pucrs.br";
-    private static int porta; // = "1521";
-    private static String sid; // = "facin11g";
-    private static String username; // = "login";
-    private static String password; // = "senha";
+    private String server; // = "camburi.pucrs.br";
+    private int porta; // = "1521";
+    private String sid; // = "facin11g";
+    private String username; // = "login";
+    private String password; // = "senha";
 //    private static BancoDAO instancia;
-    private static Connection conexao;
-    private static boolean primeiraVez = true;
+    private Connection conexao;
+    private final boolean primeiraVez = true;
 
     /*  
      public static BancoDAO novaConexao(
@@ -62,48 +62,54 @@ public class BancoDAO implements IBancoDAO {
         } catch (ClassNotFoundException ex) {
             throw new BancoDAOExcepiton("JdbcOdbDriver not found!!");
         }
-      //  boolean verificaSeExisteATabela = verificaSeExisteATabela();
-        //   if (verificaSeExisteATabela){
-        //cria instancia de tableas;
-        //    }
     }
 
+    @Override
     public String getServer() {
         return server;
     }
 
+    @Override
     public void setServer(String server) {
         this.server = server;
     }
 
+    @Override
     public double getPorta() {
         return porta;
     }
 
+    @Override
     public void setPorta(String porta2) {
         this.porta = Integer.parseInt(porta2);
     }
 
+    @Override
     public String getSid() {
         return sid;
     }
 
+    @Override
     public void setSid(String sid) {
         this.sid = sid;
     }
 
+    @Override
     public String getUsername() {
         return username;
     }
 
+    @Override
     public void setUsername(String username) {
         this.username = username;
     }
 
+    @Override
     public String getPassword() {
         return password;
     }
 
+    @Override
     public void setPassword(String password) {
         this.password = password;
     }
@@ -113,14 +119,8 @@ public class BancoDAO implements IBancoDAO {
      * @return
      */
     private Connection getConnection() throws BancoDAOExcepiton {
-        /*
-        if (primeiraVez) {
-            url = ""+url + server + ":" + porta + ":" + sid;
-            primeiraVez = false;
-        }
-        */
         try {
-            conexao = DriverManager.getConnection(""+url + server + ":" + porta + ":" + sid+"", username, password);
+            conexao = DriverManager.getConnection("" + url + server + ":" + porta + ":" + sid + "", username, password);
             return conexao;
         } catch (SQLException ex) {
             throw new BancoDAOExcepiton(ex.getMessage());
@@ -130,14 +130,11 @@ public class BancoDAO implements IBancoDAO {
 
     @Override
     public ArrayList<IOwner> buscaListaDeOwners() throws BancoDAOExcepiton {
-
         String sql;
         sql = "select distinct(OWNER) from ALL_TABLES a order by OWNER";
-
         String resultado = "";
         ArrayList<IOwner> l = new ArrayList<IOwner>();
         try {
-
             try (Connection con = getConnection()) {
                 Statement sta = con.createStatement();
                 ResultSet res = sta.executeQuery(sql);
@@ -152,15 +149,15 @@ public class BancoDAO implements IBancoDAO {
             }
 
         } catch (SQLException ex) {
-
+            
         }
         return l;
     }
 
     @Override
-    public ArrayList<IColumn> buscaListaDeTabelasDoOwnerComOsDados(IOwner owner,ITable tabela) throws BancoDAOExcepiton {
+    public ArrayList<IColumn> buscaListaDeTabelasDoOwnerComOsDados(IOwner owner, ITable tabela) throws BancoDAOExcepiton {
         ArrayList<IColumn> l = new ArrayList<IColumn>();
-        if (tabela!=null ) {
+        if (tabela != null) {
             if (null != owner) {
                 String sql;
                 sql = "select "
@@ -169,45 +166,48 @@ public class BancoDAO implements IBancoDAO {
                         + "data_length,"
                         + "data_precision,"
                         + "nullable"
-                        + " from ALL_TAB_COLUMNS where  table_name='"+tabela.getTable_name()+"' and owner = '" + owner.getNome() + "'";
-                
+                        + " from ALL_TAB_COLUMNS where  table_name='" + tabela.getTable_name() + "' and owner = '" + owner.getNome() + "'";
+
                 String resultado = "";
                 try (Connection con = getConnection()) {
                     Statement sta = con.createStatement();
                     ResultSet res = sta.executeQuery(sql);
-                    
+
                     while (res.next()) {
                         //column_name
                         Column column = new Column();
                         String string1 = res.getString(1);
-                        if (string1!=null && !string1.equalsIgnoreCase(""))
+                        if (string1 != null && !string1.equalsIgnoreCase("")) {
                             column.setColumn_name(string1);
+                        }
                         //data_type
                         String string2 = res.getString(2);
-                        if (string2!=null && !string2.equalsIgnoreCase(""))
+                        if (string2 != null && !string2.equalsIgnoreCase("")) {
                             column.setData_type(string2);
+                        }
                         String string3 = res.getString(3);
                         //data_length
-                        if (string3!=null && !string3.equalsIgnoreCase(""))
+                        if (string3 != null && !string3.equalsIgnoreCase("")) {
                             column.setData_length(string3);
+                        }
                         String string4 = res.getString(4);
                         //data_precision
-                        if (string4!=null && !string4.equalsIgnoreCase(""))
+                        if (string4 != null && !string4.equalsIgnoreCase("")) {
                             column.setData_precision(string4);
+                        }
                         //nullable
                         String string5 = res.getString(5);
-                        if (string5!=null && !string5.equalsIgnoreCase(""))
-
+                        if (string5 != null && !string5.equalsIgnoreCase("")) {
                             column.setNullable(string5);
-                        
-                        
+                        }
+
                         l.add(column);
                     }
                     res.close();
                     sta.close();
-                }catch (SQLException ex) {
-              //  System.out.println(ex.getMessage());
-                
+                } catch (SQLException ex) {
+              
+
                 }
             }
         }
@@ -243,41 +243,20 @@ public class BancoDAO implements IBancoDAO {
         }
         return l;
     }
-    
-    
-    
-     public boolean testaConexão()  {
-        boolean ativo = false;
 
-            String sql;
-            sql = "select TABLE_NAME from ALL_TABLES ";
+    public boolean testaConexao() throws BancoDAOExcepiton, SQLException {       
+        String sql;
+        sql = "select TABLE_NAME from ALL_TABLES ";
+        Connection con = getConnection();
+        Statement sta = con.createStatement();
+        ResultSet res = sta.executeQuery(sql);
 
-            
-
-            try {
-
-                try (Connection con = getConnection()) {
-                    Statement sta = con.createStatement();
-                    ResultSet res = sta.executeQuery(sql);
-
-                    while (res.next()) {
-                        ativo = true;
-                       return true;
-                    }
-                    res.close();
-                    sta.close();
-                } catch (BancoDAOExcepiton ex){
-                return ativo;
-                }
-
-            } catch (SQLException ex) {
-                return ativo;
-            } 
-            
-            
-            
-            return ativo;
+        while (res.next()) {
+            break;
         }
-       
-    
+        res.close();
+        sta.close();
+        return true;
+    }
+
 }

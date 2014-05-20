@@ -34,7 +34,8 @@ public interface IBancoDAO {
     public void setPassword(String password);
 
     public ArrayList<IOwner> buscaListaDeOwners() throws BancoDAOExcepiton;
-    
+ 
     public ArrayList<ITable> buscaListaDeTabelasDoOwner(IOwner o) throws BancoDAOExcepiton;
-     public ArrayList<IColumn> buscaListaDeTabelasDoOwnerComOsDados(IOwner owner,ITable tabela) throws BancoDAOExcepiton;
+    
+    public ArrayList<IColumn> buscaListaDeTabelasDoOwnerComOsDados(IOwner owner,ITable tabela) throws BancoDAOExcepiton;
 }

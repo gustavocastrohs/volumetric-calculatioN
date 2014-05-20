@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package model;
 
 import java.util.ArrayList;
@@ -21,8 +20,10 @@ public interface IOwner {
     public int getId();
 
     public void setId(int id);
-    
+
     public String toString();
-     public ArrayList<ITable> getListaDeTabelas();
-      public void setListaDeTabelas(ArrayList<ITable> listaDeTabelas);
+
+    public ArrayList<ITable> getListaDeTabelas();
+
+    public void setListaDeTabelas(ArrayList<ITable> listaDeTabelas);
 }

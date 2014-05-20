@@ -5,6 +5,7 @@
  */
 package viewcontroller;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -146,32 +147,21 @@ public class LoginForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
         BancoDAO novaConexao = null;
-        Configuracoes config = Configuracoes.getInstancia();
-        boolean noError = true;
+        Configuracoes config = Configuracoes.getInstancia();        
         try {
             novaConexao = new BancoDAO(jt_user.getText(), jt_pass.getText(), jt_host.getText(), jt_port.getText(), jt_sid.getText());
-
-        } catch (BancoDAOExcepiton ex) {
-
-        }
-
-        if (novaConexao.testaConexão()){
-          
-               
-                config.setBaseDeDados(novaConexao);
-                config.setUsuarioLogado(jt_user.getText());
+            novaConexao.testaConexao();
+            config.setBaseDeDados(novaConexao);
+            config.setUsuarioLogado(jt_user.getText());
                 
-                OwnerSelectionForm e = new OwnerSelectionForm();
-                e.setVisible(true);
-                setVisible(false);
-            
-        }else{
-         
-            JOptionPane.showMessageDialog(this, "ERRO NA CONEXÃO");
+            OwnerSelectionForm e = new OwnerSelectionForm();
+            e.setVisible(true);
+            setVisible(false);            
+        } catch (BancoDAOExcepiton | SQLException ex) {
+            Logger.getLogger(LoginForm.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, ex.getMessage());
         }
-        
 
 
     }//GEN-LAST:event_jButton1ActionPerformed
