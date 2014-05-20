@@ -3,14 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package viewcontroller;
-
 
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -19,8 +16,6 @@ import model.IBancoDAO;
 import model.IColumn;
 import model.IOwner;
 import model.ITable;
-import model.Owner;
-
 
 /**
  *
@@ -34,9 +29,8 @@ public class EstimationForm extends javax.swing.JFrame {
     public EstimationForm() {
         initComponents();
         this.setLocationRelativeTo(null);
+        modelTabela = (DefaultTableModel) jTable1.getModel();
     }
-
-
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -110,15 +104,20 @@ public class EstimationForm extends javax.swing.JFrame {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Nome", "Tipo", "Tamanho", "Precisão", "Nulo", "Tamanho Medio", "% Linhas Nulas"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, true, true
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jTable1.setCellSelectionEnabled(true);
         jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -214,14 +213,13 @@ public class EstimationForm extends javax.swing.JFrame {
                                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jScrollPane2)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jButton3)))
+                            .addComponent(jScrollPane2)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButton3))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
@@ -283,7 +281,7 @@ public class EstimationForm extends javax.swing.JFrame {
         OwnerSelectionForm os = new OwnerSelectionForm();
         os.setVisible(true);
         setVisible(false);
-        
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
@@ -293,7 +291,7 @@ public class EstimationForm extends javax.swing.JFrame {
 
     private void jList1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jList1MouseClicked
         // TODO add your handling code here:
-        
+
     }//GEN-LAST:event_jList1MouseClicked
 
     private void jList1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jList1MouseReleased
@@ -304,16 +302,15 @@ public class EstimationForm extends javax.swing.JFrame {
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
         // TODO add your handling code here:
-        
-        
-        
+
+
     }//GEN-LAST:event_jTable1MouseClicked
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
-        
+
         jTable1.getSelectedRow();
-        
+
     }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
@@ -375,107 +372,108 @@ public class EstimationForm extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField3;
     // End of variables declaration//GEN-END:variables
 
-public  void populaOsCamposInicias(){
-Configuracoes conf = Configuracoes.getInstancia();
-jLabel1.setText(conf.getOwnerAtual().getNome());
-populaLista();
-tabelaColunasIniciais();
-}
+    public void populaOsCamposInicias() {
+        Configuracoes conf = Configuracoes.getInstancia();
+        jLabel1.setText(conf.getOwnerAtual().getNome());
+        populaLista();
+        tabelaColunasIniciais();
+    }
 
+    public void populaLista() {
 
-
-
-
-public void populaLista(){
-
-    try {
+        try {
             DefaultListModel model = new DefaultListModel();
+            
             Configuracoes conf = Configuracoes.getInstancia();
             IBancoDAO base = conf.getBaseDeDados();
-            IOwner owner = (IOwner)conf.getOwnerAtual();
+            IOwner owner = (IOwner) conf.getOwnerAtual();
             ArrayList<ITable> buscaDadosOwner = base.buscaListaDeTabelasDoOwner(owner);
             conf.setTabelasOwner(buscaDadosOwner);
-            for (int i=0;i<buscaDadosOwner.size();i++ )
-            {
+            for (int i = 0; i < buscaDadosOwner.size(); i++) {
                 model.addElement(buscaDadosOwner.get(i));
             }
-            
+
             jList1.setModel(model);
         } catch (BancoDAOExcepiton ex) {
             Logger.getLogger(OwnerSelectionForm.class.getName()).log(Level.SEVERE, null, ex);
         }
-}
+    }
 
+    private DefaultTableModel modelTabela;
 
-public void tabelaColunasIniciais(){
-DefaultTableModel model = new DefaultTableModel();
-model.addColumn("column_name");
-model.addColumn("data_type");
-model.addColumn("data_length");
-model.addColumn("data_precision");
-model.addColumn("nullable");
-model.addColumn("tamanhoMedioEstimado");
-model.addColumn("percentualDeLinhasNulas");
+    public void tabelaColunasIniciais() {
+ //       DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+
+        /*
+         DefaultTableModel model = new DefaultTableModel();
+         model.addColumn("column_name");
+         model.addColumn("data_type");
+         model.addColumn("data_length");
+         model.addColumn("data_precision");
+         model.addColumn("nullable");
+         model.addColumn("tamanhoMedioEstimado");
+         model.addColumn("percentualDeLinhasNulas");
     
 
-jTable1.setModel(model);
-}
+         jTable1.setModel(model);
+         */
+        jTable1.setModel(modelTabela);
+    }
 
-public void setaNomeDaTabelaNaLabel(){
-    ITable t = (ITable) jList1.getSelectedValue();
-    jLabel7.setText(t.toString());
+    public void setaNomeDaTabelaNaLabel() {
+        ITable t = (ITable) jList1.getSelectedValue();
+        jLabel7.setText(t.toString());
 
-}
+    }
 
-public void populaTabelaComDadosDaITable(){
-    tabelaColunasIniciais();    
-    try {
+    public void populaTabelaComDadosDaITable() {
+        tabelaColunasIniciais();
+        try {
             DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        for (int i = model.getRowCount()-1; i >=0 ; i--) {
+            model.removeRow(i);
+        }
+
             Configuracoes conf = Configuracoes.getInstancia();
             IBancoDAO base = conf.getBaseDeDados();
-            ArrayList<IColumn> buscaListaDeTabelasDoOwnerComOsDados = base.buscaListaDeTabelasDoOwnerComOsDados(conf.getOwnerAtual(),(ITable) jList1.getSelectedValue() );
-            for (IColumn coluna : buscaListaDeTabelasDoOwnerComOsDados){
+            ArrayList<IColumn> buscaListaDeTabelasDoOwnerComOsDados = base.buscaListaDeTabelasDoOwnerComOsDados(conf.getOwnerAtual(), (ITable) jList1.getSelectedValue());
+            for (IColumn coluna : buscaListaDeTabelasDoOwnerComOsDados) {
 
-
-            model.addRow(new Object[]{coluna.getColumn_name(),coluna.getData_type(),coluna.getData_length(),coluna.getData_precision(),coluna.getNullable()});
-            jTable1.setModel(model);
+                model.addRow(new Object[]{coluna.getColumn_name(), coluna.getData_type(), coluna.getData_length(), coluna.getData_precision(), coluna.getNullable()});
+                jTable1.setModel(model);
             }
         } catch (BancoDAOExcepiton ex) {
             Logger.getLogger(EstimationForm.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
 
-}
+    public void populaDadosInciaisComDados() {
+        tabelaColunasIniciais();
+        try {
 
-public void populaDadosInciaisComDados(){
-    tabelaColunasIniciais();    
-    try {
-            
             Configuracoes conf = Configuracoes.getInstancia();
             IBancoDAO base = conf.getBaseDeDados();
-            for (ITable t : conf.getOwnerAtual().getListaDeTabelas()){
-            ArrayList<IColumn> buscaListaDeTabelasDoOwnerComOsDados = base.buscaListaDeTabelasDoOwnerComOsDados(conf.getOwnerAtual(),t );
-            conf.setIColumnDaTabela(buscaListaDeTabelasDoOwnerComOsDados,t);
+            for (ITable t : conf.getOwnerAtual().getListaDeTabelas()) {
+                ArrayList<IColumn> buscaListaDeTabelasDoOwnerComOsDados = base.buscaListaDeTabelasDoOwnerComOsDados(conf.getOwnerAtual(), t);
+                conf.setIColumnDaTabela(buscaListaDeTabelasDoOwnerComOsDados, t);
             }
 
-}catch(Exception e){}
-}
+        } catch (Exception e) {
+        }
+    }
 
+    public void alteraDadosDaIColumn() {
 
-public void alteraDadosDaIColumn(){
+        TableModel model = jTable1.getModel();
 
-TableModel model = jTable1.getModel();
+        model.getValueAt(WIDTH, WIDTH);
 
-    model.getValueAt(WIDTH, WIDTH);
+    }
 
+    private IColumn buscaColunaASerEditada(String coluna, String tabela) {
 
-}
-
-private IColumn buscaColunaASerEditada(String coluna, String tabela){
-
-    
-    
-return null;
-}
+        return null;
+    }
 
 }
