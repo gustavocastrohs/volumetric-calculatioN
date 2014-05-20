@@ -50,6 +50,7 @@ public class OwnerSelectionForm extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Seleção do Owner");
 
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel1.setText("Owner");
 
         jButton1.setText("Avançar");
@@ -91,7 +92,7 @@ public class OwnerSelectionForm extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addGap(26, 26, 26)
-                        .addComponent(jComboBox1, 0, 262, Short.MAX_VALUE))
+                        .addComponent(jComboBox1, 0, 254, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jButton2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
