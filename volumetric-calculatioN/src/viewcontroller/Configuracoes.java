@@ -7,6 +7,9 @@
 package viewcontroller;
 
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import model.BancoDAOExcepiton;
 import model.IBancoDAO;
 import model.IColumn;
 import model.IOwner;
@@ -44,6 +47,7 @@ public class Configuracoes {
 
     public void setOwnerAtual(IOwner ownerAtual) {
         this.ownerAtual = ownerAtual;
+        
     }
 
     public String getUsuarioLogado() {
@@ -65,6 +69,7 @@ public class Configuracoes {
     public void setTabelasOwner (ArrayList<ITable> tabelas){
     
     this.ownerAtual.setListaDeTabelas(tabelas);
+    setListaDeTabelasAlterandoSeuValor(tabelas);
              
     }
     
@@ -97,5 +102,32 @@ public class Configuracoes {
         
     
     }
+    
+    
+        
+     
+    
+    
+    
+    public void setListaDeTabelasAlterandoSeuValor(ArrayList<ITable> listaDeTabelas) {
+     
+        IBancoDAO base = getBaseDeDados();
+        for (ITable tabela : listaDeTabelas) {           
+            try {
+                tabela.setListaDeColunas(base.buscaListaDeTabelasDoOwnerComOsDados(getOwnerAtual(), tabela));
+                for (IColumn coluna : tabela.getListaDeColunas()) {
+                    if (coluna.getNullable().equalsIgnoreCase("Y")) {
+                        coluna.setPercentualDeLinhasNulas(50.00);
+                    }
+                    coluna.setTamanhoMedioEstimado(Double.parseDouble(coluna.getData_length()) / 2);
+                }
+            } catch (BancoDAOExcepiton ex) {
+                Logger.getLogger(Configuracoes.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
 
 }
+
+
+

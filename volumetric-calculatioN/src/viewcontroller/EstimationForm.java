@@ -396,8 +396,8 @@ public class EstimationForm extends javax.swing.JFrame {
             IOwner owner = (IOwner) conf.getOwnerAtual();
             ArrayList<ITable> buscaDadosOwner = base.buscaListaDeTabelasDoOwner(owner);
             conf.setTabelasOwner(buscaDadosOwner);
-            for (int i = 0; i < buscaDadosOwner.size(); i++) {
-                model.addElement(buscaDadosOwner.get(i));
+            for (int i = 0; i < conf.getOwnerAtual().getListaDeTabelas().size(); i++) {
+                model.addElement(conf.getOwnerAtual().getListaDeTabelas().get(i));
             }
 
             jList1.setModel(model);
@@ -435,23 +435,22 @@ public class EstimationForm extends javax.swing.JFrame {
 
     public void populaTabelaComDadosDaITable() {
         tabelaColunasIniciais();
-        try {
-            DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         for (int i = model.getRowCount()-1; i >=0 ; i--) {
             model.removeRow(i);
         }
+       
+       
+            
+            ITable tabela = (ITable)jList1.getSelectedValue();
+            
+                for (IColumn coluna : tabela.getListaDeColunas()) {
 
-            Configuracoes conf = Configuracoes.getInstancia();
-            IBancoDAO base = conf.getBaseDeDados();
-            ArrayList<IColumn> buscaListaDeTabelasDoOwnerComOsDados = base.buscaListaDeTabelasDoOwnerComOsDados(conf.getOwnerAtual(), (ITable) jList1.getSelectedValue());
-            for (IColumn coluna : buscaListaDeTabelasDoOwnerComOsDados) {
-
-                model.addRow(new Object[]{coluna.getColumn_name(), coluna.getData_type(), coluna.getData_length(), coluna.getData_precision(), coluna.getNullable()});
-                jTable1.setModel(model);
-            }
-        } catch (BancoDAOExcepiton ex) {
-            Logger.getLogger(EstimationForm.class.getName()).log(Level.SEVERE, null, ex);
-        }
+                    model.addRow(new Object[]{coluna.getColumn_name(), coluna.getData_type(), coluna.getData_length(), coluna.getData_precision(), coluna.getNullable(), coluna.getTamanhoMedioEstimado(), coluna.getPercentualDeLinhasNulas()});
+                    jTable1.setModel(model);
+               }
+            
+        
 
     }
 
@@ -483,4 +482,7 @@ public class EstimationForm extends javax.swing.JFrame {
         return null;
     }
 
+    
+    
+    
 }
