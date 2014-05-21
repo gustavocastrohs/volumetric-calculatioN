@@ -97,6 +97,19 @@ public class Configuracoes {
 
         return retorno;
     }
+    public IColumn getColunaDaTabela(ITable tabela, String coluna) {
+        IColumn retorno = null;
+        
+        for (IColumn c : tabela.getListaDeColunas()) {
+            if (c.getColumn_name().equalsIgnoreCase(coluna)) {
+                return c;
+
+            }
+
+        }
+
+        return retorno;
+    }
     
     public void setIColumnDaTabela(ArrayList<IColumn> buscaListaDeTabelasDoOwnerComOsDados,ITable t){
         

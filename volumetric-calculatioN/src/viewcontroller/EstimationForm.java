@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import model.BancoDAOExcepiton;
@@ -52,9 +53,9 @@ public class EstimationForm extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
+        jtf_numeroEstimadoDeLinhasIniciais = new javax.swing.JTextField();
+        jtf_crescimentoEsperado = new javax.swing.JTextField();
+        jtf_tempoDeRetencao = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
@@ -71,11 +72,6 @@ public class EstimationForm extends javax.swing.JFrame {
             }
         });
 
-        jList1.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
         jList1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jList1MouseClicked(evt);
@@ -146,15 +142,15 @@ public class EstimationForm extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField1))
+                .addComponent(jtf_numeroEstimadoDeLinhasIniciais))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField3, javax.swing.GroupLayout.DEFAULT_SIZE, 139, Short.MAX_VALUE))
+                .addComponent(jtf_tempoDeRetencao, javax.swing.GroupLayout.DEFAULT_SIZE, 139, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField2))
+                .addComponent(jtf_crescimentoEsperado))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -162,15 +158,15 @@ public class EstimationForm extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jtf_numeroEstimadoDeLinhasIniciais, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jtf_crescimentoEsperado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jtf_tempoDeRetencao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -192,7 +188,7 @@ public class EstimationForm extends javax.swing.JFrame {
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel10.setText("Colunas");
 
-        jButton3.setText("Escolher");
+        jButton3.setText("Salvar");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
@@ -316,7 +312,7 @@ public class EstimationForm extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
 
-        jTable1.getSelectedRow();
+        salvaDadosDaTabela();
 
     }//GEN-LAST:event_jButton3ActionPerformed
 
@@ -374,9 +370,9 @@ public class EstimationForm extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
+    private javax.swing.JTextField jtf_crescimentoEsperado;
+    private javax.swing.JTextField jtf_numeroEstimadoDeLinhasIniciais;
+    private javax.swing.JTextField jtf_tempoDeRetencao;
     // End of variables declaration//GEN-END:variables
 
     public void populaOsCamposInicias() {
@@ -390,7 +386,7 @@ public class EstimationForm extends javax.swing.JFrame {
 
         try {
             DefaultListModel model = new DefaultListModel();
-            
+
             Configuracoes conf = Configuracoes.getInstancia();
             IBancoDAO base = conf.getBaseDeDados();
             IOwner owner = (IOwner) conf.getOwnerAtual();
@@ -409,7 +405,7 @@ public class EstimationForm extends javax.swing.JFrame {
     private DefaultTableModel modelTabela;
 
     public void tabelaColunasIniciais() {
- //       DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        //       DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
 
         /*
          DefaultTableModel model = new DefaultTableModel();
@@ -436,21 +432,17 @@ public class EstimationForm extends javax.swing.JFrame {
     public void populaTabelaComDadosDaITable() {
         tabelaColunasIniciais();
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        for (int i = model.getRowCount()-1; i >=0 ; i--) {
+        for (int i = model.getRowCount() - 1; i >= 0; i--) {
             model.removeRow(i);
         }
-       
-       
-            
-            ITable tabela = (ITable)jList1.getSelectedValue();
-            
-                for (IColumn coluna : tabela.getListaDeColunas()) {
 
-                    model.addRow(new Object[]{coluna.getColumn_name(), coluna.getData_type(), coluna.getData_length(), coluna.getData_precision(), coluna.getNullable(), coluna.getTamanhoMedioEstimado(), coluna.getPercentualDeLinhasNulas()});
-                    jTable1.setModel(model);
-               }
-            
-        
+        ITable tabela = (ITable) jList1.getSelectedValue();
+
+        for (IColumn coluna : tabela.getListaDeColunas()) {
+
+            model.addRow(new Object[]{coluna.getColumn_name(), coluna.getData_type(), coluna.getData_length(), coluna.getData_precision(), coluna.getNullable(), coluna.getTamanhoMedioEstimado(), coluna.getPercentualDeLinhasNulas()});
+            jTable1.setModel(model);
+        }
 
     }
 
@@ -482,7 +474,44 @@ public class EstimationForm extends javax.swing.JFrame {
         return null;
     }
 
-    
-    
-    
+    public void salvaDadosDaTabela() {
+        ITable tabela = (ITable) jList1.getSelectedValue();
+        if (tabela != null) {
+            DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+            Configuracoes conf = Configuracoes.getInstancia();
+
+            for (int i = 0; i < model.getRowCount(); i++) {
+                IColumn colunaDaTabela = conf.getColunaDaTabela(tabela, (String) model.getValueAt(i, 0));
+                colunaDaTabela.setPercentualDeLinhasNulas((Double) (model.getValueAt(i, 5)));
+                colunaDaTabela.setPercentualDeLinhasNulas((Double) (model.getValueAt(i, 6)));
+
+            }
+
+            if (!jtf_numeroEstimadoDeLinhasIniciais.getText().equalsIgnoreCase("")) {
+                tabela.setNumeroEstimadoDeLinhasInicias(Integer.parseInt(jtf_numeroEstimadoDeLinhasIniciais.getText()));
+            }
+            if (!jtf_crescimentoEsperado.getText().equalsIgnoreCase("")) {
+                tabela.setPercentualDeCrescimento(Integer.parseInt(jtf_crescimentoEsperado.getText()));
+            }
+            if (!jtf_tempoDeRetencao.getText().equalsIgnoreCase("")) {
+                int parseInt = Integer.parseInt(jtf_tempoDeRetencao.getText());
+                if (parseInt > 5) {
+                    tabela.setTempoDeRetencao(parseInt);
+                } else {
+                    tabela.setTempoDeRetencao(5);
+                }
+            }
+            else {
+                    tabela.setTempoDeRetencao(5);
+                }
+        } else {
+            JOptionPane.showMessageDialog(this, "Selecione uma tabela");
+        }
+    //for (int j = 0;j<model.getColumnCount();j++){}
+        //}
+
+    //for (int j = 0;j<model.getColumnCount();j++){}
+        //}
+    }
+
 }
