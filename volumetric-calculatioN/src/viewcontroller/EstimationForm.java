@@ -482,7 +482,9 @@ public class EstimationForm extends javax.swing.JFrame {
 
             for (int i = 0; i < model.getRowCount(); i++) {
                 IColumn colunaDaTabela = conf.getColunaDaTabela(tabela, (String) model.getValueAt(i, 0));
-                colunaDaTabela.setPercentualDeLinhasNulas((Double) (model.getValueAt(i, 5)));
+                if (!(model.getValueAt(i, 5).toString().equalsIgnoreCase("")))
+                    colunaDaTabela.setTamanhoMedioEstimado((Double) (model.getValueAt(i, 5)));
+                if (!(model.getValueAt(i, 6).toString().equalsIgnoreCase("")))
                 colunaDaTabela.setPercentualDeLinhasNulas((Double) (model.getValueAt(i, 6)));
 
             }
