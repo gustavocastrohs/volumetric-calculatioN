@@ -311,9 +311,12 @@ public class EstimationForm extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
-
-        salvaDadosDaTabela();
-
+        boolean salvaDadosDaTabela = salvaDadosDaTabela();
+        if (salvaDadosDaTabela){
+        JOptionPane.showMessageDialog(this, "Tabela Salva");
+        }else{
+        JOptionPane.showMessageDialog(this, "Selecione uma tabela");
+        }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
@@ -474,7 +477,7 @@ public class EstimationForm extends javax.swing.JFrame {
         return null;
     }
 
-    public void salvaDadosDaTabela() {
+    public boolean salvaDadosDaTabela() {
         ITable tabela = (ITable) jList1.getSelectedValue();
         if (tabela != null) {
             DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
@@ -482,10 +485,12 @@ public class EstimationForm extends javax.swing.JFrame {
 
             for (int i = 0; i < model.getRowCount(); i++) {
                 IColumn colunaDaTabela = conf.getColunaDaTabela(tabela, (String) model.getValueAt(i, 0));
-                if (!(model.getValueAt(i, 5).toString().equalsIgnoreCase("")))
-                    colunaDaTabela.setTamanhoMedioEstimado((Double) (model.getValueAt(i, 5)));
-                if (!(model.getValueAt(i, 6).toString().equalsIgnoreCase("")))
-                colunaDaTabela.setPercentualDeLinhasNulas((Double) (model.getValueAt(i, 6)));
+                Object tamanhoMedio = model.getValueAt(i, 5);
+                if (tamanhoMedio!=null)
+                    colunaDaTabela.setTamanhoMedioEstimado(Double.parseDouble(tamanhoMedio.toString()));
+               Object percetualDeLinhasNulas=model.getValueAt(i, 6);
+                if (percetualDeLinhasNulas!=null)
+                colunaDaTabela.setPercentualDeLinhasNulas(Double.parseDouble(percetualDeLinhasNulas.toString()));
 
             }
 
@@ -506,14 +511,15 @@ public class EstimationForm extends javax.swing.JFrame {
             else {
                     tabela.setTempoDeRetencao(5);
                 }
+            
+            
+            
+            return true;
         } else {
-            JOptionPane.showMessageDialog(this, "Selecione uma tabela");
+            return false;
+            
         }
-    //for (int j = 0;j<model.getColumnCount();j++){}
-        //}
-
-    //for (int j = 0;j<model.getColumnCount();j++){}
-        //}
+        
     }
 
 }
