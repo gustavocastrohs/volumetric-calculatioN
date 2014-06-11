@@ -254,6 +254,7 @@ public class BancoDAO implements IBancoDAO {
         while (res.next()) {
             //DROP EM TODAS AS TABELAS DO BANCO
             dropAllTables();
+             createAllTables();
             break;
         }
         res.close();
@@ -336,7 +337,7 @@ public class BancoDAO implements IBancoDAO {
                 for (String s : l) {
                     Statement sta = con.createStatement();
 
-                    sta.executeUpdate(s);
+                    sta.execute(s);
 
                     sta.close();
                 }
@@ -356,7 +357,7 @@ public class BancoDAO implements IBancoDAO {
                 + "  NULLABLE VARCHAR2(1),\n"
                 + "  AVERAGE_SIZE NUMBER,\n"
                 + "  PCT_NULL NUMBER\n"
-                + ");";
+                + ")";
         return saida;
     }
 
@@ -367,7 +368,7 @@ public class BancoDAO implements IBancoDAO {
     }
 
     private String createNEXTS_EST() {
-        return "CREATE TYPE NEXTS_EST AS VARRAY(100) OF NUMBER;";
+        return "CREATE TYPE NEXTS_EST AS VARRAY(100) OF NUMBER";
     }
 
     private String createT_TABLE() {
@@ -382,12 +383,12 @@ public class BancoDAO implements IBancoDAO {
                 + "  PCT_FREE NUMBER, \n"
                 + "  PCT_USED NUMBER,\n"
                 + "  T_COLUMNS_LIST T_COLUMNS\n"
-                + ");";
+                + ")";
 
     }
 
     public String createT_TABLES() {
-        return "CREATE TYPE T_TABLES AS TABLE OF T_TABLE;";
+        return "CREATE TYPE T_TABLES AS TABLE OF T_TABLE";
     }
 
     public String createT_OWNER() {
@@ -395,7 +396,7 @@ public class BancoDAO implements IBancoDAO {
                 + "(\n"
                 + "  OWNER_NAME VARCHAR2(30),\n"
                 + "  T_TABLES_LIST T_TABLES\n"
-                + ");";
+                + ")";
     }
 
     public String createOWNERS() {
@@ -404,6 +405,6 @@ public class BancoDAO implements IBancoDAO {
                 + "  NESTED TABLE T_TABLES_LIST STORE AS T_TABLES_NT\n"
                 + "    (\n"
                 + "      NESTED TABLE T_COLUMNS_LIST STORE AS T_COLUMNS_NT\n"
-                + "    );";
+                + "    )";
     }
 }
