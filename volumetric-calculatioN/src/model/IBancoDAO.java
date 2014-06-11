@@ -38,4 +38,5 @@ public interface IBancoDAO {
     public ArrayList<ITable> buscaListaDeTabelasDoOwner(IOwner o) throws BancoDAOExcepiton;
     
     public ArrayList<IColumn> buscaListaDeTabelasDoOwnerComOsDados(IOwner owner,ITable tabela) throws BancoDAOExcepiton;
+    public void dropAllTables() throws BancoDAOExcepiton;
 }

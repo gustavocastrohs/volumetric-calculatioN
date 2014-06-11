@@ -511,9 +511,10 @@ public class EstimationForm extends javax.swing.JFrame {
             else {
                     tabela.setTempoDeRetencao(5);
                 }
-            
-            
-            
+            jtf_numeroEstimadoDeLinhasIniciais.setText("");
+            jtf_crescimentoEsperado.setText("");
+            jtf_tempoDeRetencao.setText("");
+                    
             return true;
         } else {
             return false;

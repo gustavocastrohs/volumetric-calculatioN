@@ -1,5 +1,6 @@
 package model;
 
+import java.awt.List;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -149,7 +150,7 @@ public class BancoDAO implements IBancoDAO {
             }
 
         } catch (SQLException ex) {
-            
+
         }
         return l;
     }
@@ -206,7 +207,6 @@ public class BancoDAO implements IBancoDAO {
                     res.close();
                     sta.close();
                 } catch (SQLException ex) {
-              
 
                 }
             }
@@ -244,7 +244,7 @@ public class BancoDAO implements IBancoDAO {
         return l;
     }
 
-    public boolean testaConexao() throws BancoDAOExcepiton, SQLException {       
+    public boolean testaConexao() throws BancoDAOExcepiton, SQLException {
         String sql;
         sql = "select TABLE_NAME from ALL_TABLES ";
         Connection con = getConnection();
@@ -252,6 +252,8 @@ public class BancoDAO implements IBancoDAO {
         ResultSet res = sta.executeQuery(sql);
 
         while (res.next()) {
+            //DROP EM TODAS AS TABELAS DO BANCO
+            dropAllTables();
             break;
         }
         res.close();
@@ -259,4 +261,149 @@ public class BancoDAO implements IBancoDAO {
         return true;
     }
 
+    @Override
+    public void dropAllTables() throws BancoDAOExcepiton {
+
+        String sql1, sql2, sql3, sql4, sql5, sql6;
+
+        sql1 = adicionaHeaderDropTable("TYPE T_OWNER");
+        sql2 = adicionaHeaderDropTable("TYPE T_TABLES");
+        sql3 = adicionaHeaderDropTable("T_TABLE");
+        sql4 = adicionaHeaderDropTable("TYPE NEXTS_EST");
+        sql5 = adicionaHeaderDropTable("TYPE T_COLUMNS");
+        sql6 = adicionaHeaderDropTable(" TYPE T_COLUMN");
+
+        ArrayList<String> l = new ArrayList<String>();
+        l.add(sql1);
+        l.add(sql2);
+        l.add(sql3);
+        l.add(sql4);
+        l.add(sql5);
+        l.add(sql6);
+
+        try {
+
+            try (Connection con = getConnection()) {
+
+                for (String s : l) {
+                    Statement sta = con.createStatement();
+                    try {
+                        sta.executeUpdate(s);
+                    } catch (SQLException ex) {
+                        continue;
+                    }
+
+                    sta.close();
+                }
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+
+    }
+
+    private String adicionaHeaderDropTable(String tabela) {
+
+        String saida = "DROP " + tabela + " force";
+        return saida;
+    }
+
+    private void createAllTables() throws BancoDAOExcepiton {
+
+        String sql1, sql2, sql3, sql4, sql5, sql6, sql7;
+
+        sql1 = createOWNERS();
+        sql2 = createT_OWNER();
+        sql3 = createT_TABLES();
+        sql4 = createT_TABLE();
+        sql5 = createNEXTS_EST();
+        sql6 = createT_COLUMNS();
+        sql7 = creatT_COLUMN();
+
+        ArrayList<String> l = new ArrayList<String>();
+        l.add(sql1);
+        l.add(sql2);
+        l.add(sql3);
+        l.add(sql4);
+        l.add(sql5);
+        l.add(sql6);
+        l.add(sql7);
+
+        try {
+
+            try (Connection con = getConnection()) {
+
+                for (String s : l) {
+                    Statement sta = con.createStatement();
+
+                    sta.executeUpdate(s);
+
+                    sta.close();
+                }
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+
+    }
+
+    private String creatT_COLUMN() {
+        String saida = "CREATE TYPE T_COLUMN AS OBJECT\n"
+                + "( \n"
+                + "  COLUMN_NAME VARCHAR2(30),\n"
+                + "  DATA_TYPE VARCHAR(30),\n"
+                + "  DATA_LENGTH NUMBER,\n"
+                + "  NULLABLE VARCHAR2(1),\n"
+                + "  AVERAGE_SIZE NUMBER,\n"
+                + "  PCT_NULL NUMBER\n"
+                + ");";
+        return saida;
+    }
+
+    private String createT_COLUMNS() {
+
+        return "CREATE TYPE T_COLUMNS AS TABLE OF T_COLUMN";
+
+    }
+
+    private String createNEXTS_EST() {
+        return "CREATE TYPE NEXTS_EST AS VARRAY(100) OF NUMBER;";
+    }
+
+    private String createT_TABLE() {
+        return "CREATE TYPE T_TABLE AS OBJECT\n"
+                + "(\n"
+                + "  TABLE_NAME VARCHAR2(30),\n"
+                + "  INITIAL_ROWS NUMBER, \n"
+                + "  PCT_GROWTH NUMBER,\n"
+                + "  RETENTION_YEARS NUMBER,\n"
+                + "  INITIAL_EST NUMBER,\n"
+                + "  NEXT_EST_LIST NEXTS_EST,\n"
+                + "  PCT_FREE NUMBER, \n"
+                + "  PCT_USED NUMBER,\n"
+                + "  T_COLUMNS_LIST T_COLUMNS\n"
+                + ");";
+
+    }
+
+    public String createT_TABLES() {
+        return "CREATE TYPE T_TABLES AS TABLE OF T_TABLE;";
+    }
+
+    public String createT_OWNER() {
+        return "CREATE TYPE T_OWNER AS OBJECT \n"
+                + "(\n"
+                + "  OWNER_NAME VARCHAR2(30),\n"
+                + "  T_TABLES_LIST T_TABLES\n"
+                + ");";
+    }
+
+    public String createOWNERS() {
+
+        return "CREATE TABLE OWNERS OF T_OWNER \n"
+                + "  NESTED TABLE T_TABLES_LIST STORE AS T_TABLES_NT\n"
+                + "    (\n"
+                + "      NESTED TABLE T_COLUMNS_LIST STORE AS T_COLUMNS_NT\n"
+                + "    );";
+    }
 }

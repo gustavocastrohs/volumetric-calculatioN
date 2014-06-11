@@ -152,6 +152,7 @@ public class LoginForm extends javax.swing.JFrame {
         try {
             novaConexao = new BancoDAO(jt_user.getText(), jt_pass.getText(), jt_host.getText(), jt_port.getText(), jt_sid.getText());
             novaConexao.testaConexao();
+            
             config.setBaseDeDados(novaConexao);
             config.setUsuarioLogado(jt_user.getText());
                 
