@@ -269,7 +269,7 @@ public class BancoDAO implements IBancoDAO {
 
         sql1 = adicionaHeaderDropTable("TYPE T_OWNER");
         sql2 = adicionaHeaderDropTable("TYPE T_TABLES");
-        sql3 = "DROP Type T_TABLE";
+        sql3 = adicionaHeaderDropTable("TYPE T_TABLE");
         sql4 = adicionaHeaderDropTable("TYPE NEXTS_EST");
         sql5 = adicionaHeaderDropTable("TYPE T_COLUMNS");
         sql6 = adicionaHeaderDropTable("TYPE T_COLUMN");
@@ -341,11 +341,20 @@ public class BancoDAO implements IBancoDAO {
             Statement sta = con.createStatement();
             
             
+            
+           
+            
                 for (String s : l) {
                     
                     
 
-                    sta.execute(s);
+                    try {
+                        sta.execute(s);
+                      
+                    } catch (SQLException ex) {
+                        continue;
+                        
+                    }
 
                     
                 }
