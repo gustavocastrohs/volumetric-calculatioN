@@ -254,7 +254,7 @@ public class BancoDAO implements IBancoDAO {
         while (res.next()) {
             //DROP EM TODAS AS TABELAS DO BANCO
             dropAllTables();
-             createAllTables();
+            createAllTables();
             break;
         }
         res.close();
@@ -262,7 +262,7 @@ public class BancoDAO implements IBancoDAO {
         return true;
     }
 
-    @Override
+    
     public void dropAllTables() throws BancoDAOExcepiton {
 
         String sql1, sql2, sql3, sql4, sql5, sql6;
@@ -286,22 +286,21 @@ public class BancoDAO implements IBancoDAO {
 
             try (Connection con = getConnection()) {
                 Statement sta = con.createStatement();
-                
+
                 for (String s : l) {
-                   
+
                     try {
                         sta.execute(s);
                     } catch (SQLException ex) {
                         continue;
-                        
+
                     }
 
-                  
                 }
-                  sta.close();
+                sta.close();
             }
         } catch (SQLException ex) {
-         //   System.out.println(ex.getMessage());
+            //   System.out.println(ex.getMessage());
         }
 
     }
@@ -314,7 +313,7 @@ public class BancoDAO implements IBancoDAO {
 
     private void createAllTables() throws BancoDAOExcepiton {
 
-        String s1,s2,s3,s4,s5,s6,s7;
+        String s1, s2, s3, s4, s5, s6, s7;
 
         s1 = createT_COLUMN();
         s2 = createT_COLUMNS();
@@ -323,8 +322,6 @@ public class BancoDAO implements IBancoDAO {
         s5 = createT_TABLES();
         s6 = createT_OWNER();
         s7 = createOWNERS();
-        
-     
 
         ArrayList<String> l = new ArrayList<String>();
         l.add(s1);
@@ -338,25 +335,18 @@ public class BancoDAO implements IBancoDAO {
         try {
 
             try (Connection con = getConnection()) {
-            Statement sta = con.createStatement();
-            
-            
-            
-           
-            
+                Statement sta = con.createStatement();
+
                 for (String s : l) {
-                    
-                    
 
                     try {
                         sta.execute(s);
-                      
+
                     } catch (SQLException ex) {
                         continue;
-                        
+
                     }
 
-                    
                 }
                 sta.close();
             }
@@ -405,11 +395,11 @@ public class BancoDAO implements IBancoDAO {
 
     }
 
-    public String createT_TABLES() {
+    private String createT_TABLES() {
         return "CREATE TYPE T_TABLES AS TABLE OF T_TABLE";
     }
 
-    public String createT_OWNER() {
+    private String createT_OWNER() {
         return "CREATE TYPE T_OWNER AS OBJECT \n"
                 + "(\n"
                 + "  OWNER_NAME VARCHAR2(30),\n"
@@ -417,12 +407,33 @@ public class BancoDAO implements IBancoDAO {
                 + ")";
     }
 
-    public String createOWNERS() {
+    private String createOWNERS() {
 
         return "CREATE TABLE OWNERS OF T_OWNER \n"
                 + "  NESTED TABLE T_TABLES_LIST STORE AS T_TABLES_NT\n"
                 + "    (\n"
                 + "      NESTED TABLE T_COLUMNS_LIST STORE AS T_COLUMNS_NT\n"
                 + "    )";
+    }
+    
+    
+    @Override
+    public void InsertIntoOwners(IOwner owner) throws BancoDAOExcepiton {
+
+        try {
+            try (Connection con = getConnection()) {
+                Statement sta = con.createStatement();
+                try {
+                    sta.execute(
+                            "INSERT INTO owners VALUES ("
+                            + "T_OWNER('" + owner.getNome() + "', NULL)"
+                            + ")");
+                } catch (SQLException ex) {
+                }
+                sta.close();
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
     }
 }
