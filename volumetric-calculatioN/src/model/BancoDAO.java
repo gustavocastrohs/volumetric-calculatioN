@@ -269,10 +269,10 @@ public class BancoDAO implements IBancoDAO {
 
         sql1 = adicionaHeaderDropTable("TYPE T_OWNER");
         sql2 = adicionaHeaderDropTable("TYPE T_TABLES");
-        sql3 = adicionaHeaderDropTable("T_TABLE");
+        sql3 = "DROP Type T_TABLE";
         sql4 = adicionaHeaderDropTable("TYPE NEXTS_EST");
         sql5 = adicionaHeaderDropTable("TYPE T_COLUMNS");
-        sql6 = adicionaHeaderDropTable(" TYPE T_COLUMN");
+        sql6 = adicionaHeaderDropTable("TYPE T_COLUMN");
 
         ArrayList<String> l = new ArrayList<String>();
         l.add(sql1);
@@ -285,62 +285,71 @@ public class BancoDAO implements IBancoDAO {
         try {
 
             try (Connection con = getConnection()) {
-
+                Statement sta = con.createStatement();
+                
                 for (String s : l) {
-                    Statement sta = con.createStatement();
+                   
                     try {
-                        sta.executeUpdate(s);
+                        sta.execute(s);
                     } catch (SQLException ex) {
                         continue;
+                        
                     }
 
-                    sta.close();
+                  
                 }
+                  sta.close();
             }
         } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
+         //   System.out.println(ex.getMessage());
         }
 
     }
 
     private String adicionaHeaderDropTable(String tabela) {
 
-        String saida = "DROP " + tabela + " force";
+        String saida = "DROP  " + tabela + "  force";
         return saida;
     }
 
     private void createAllTables() throws BancoDAOExcepiton {
 
-        String sql1, sql2, sql3, sql4, sql5, sql6, sql7;
+        String s1,s2,s3,s4,s5,s6,s7;
 
-        sql1 = createOWNERS();
-        sql2 = createT_OWNER();
-        sql3 = createT_TABLES();
-        sql4 = createT_TABLE();
-        sql5 = createNEXTS_EST();
-        sql6 = createT_COLUMNS();
-        sql7 = creatT_COLUMN();
+        s1 = createT_COLUMN();
+        s2 = createT_COLUMNS();
+        s3 = createNEXTS_EST();
+        s4 = createT_TABLE();
+        s5 = createT_TABLES();
+        s6 = createT_OWNER();
+        s7 = createOWNERS();
+        
+     
 
         ArrayList<String> l = new ArrayList<String>();
-        l.add(sql1);
-        l.add(sql2);
-        l.add(sql3);
-        l.add(sql4);
-        l.add(sql5);
-        l.add(sql6);
-        l.add(sql7);
+        l.add(s1);
+        l.add(s2);
+        l.add(s3);
+        l.add(s4);
+        l.add(s5);
+        l.add(s6);
+        l.add(s7);
 
         try {
 
             try (Connection con = getConnection()) {
-
+            Statement sta = con.createStatement();
+            
+            
                 for (String s : l) {
-                    Statement sta = con.createStatement();
+                    
+                    
 
                     sta.execute(s);
 
-                    sta.close();
+                    
                 }
+                sta.close();
             }
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
@@ -348,7 +357,7 @@ public class BancoDAO implements IBancoDAO {
 
     }
 
-    private String creatT_COLUMN() {
+    private String createT_COLUMN() {
         String saida = "CREATE TYPE T_COLUMN AS OBJECT\n"
                 + "( \n"
                 + "  COLUMN_NAME VARCHAR2(30),\n"
