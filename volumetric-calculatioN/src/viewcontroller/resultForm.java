@@ -6,6 +6,10 @@
 
 package viewcontroller;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import model.BancoDAO;
+import model.BancoDAOExcepiton;
 import model.IOwner;
 
 /**
@@ -167,4 +171,15 @@ public class resultForm extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextArea1;
     // End of variables declaration//GEN-END:variables
+
+private void addOwner(){
+Configurations conf = Configurations.getInstancia();
+        try {
+            conf.InsertIntoOwners();
+        } catch (BancoDAOExcepiton ex) {
+            Logger.getLogger(resultForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+}
+
 }

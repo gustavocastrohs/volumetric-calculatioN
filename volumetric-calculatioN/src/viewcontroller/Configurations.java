@@ -19,18 +19,18 @@ import model.ITable;
  *
  * @author 10109144
  */
-public class Configuracoes {
- private static Configuracoes instancia;
+public class Configurations {
+ private static Configurations instancia;
  
- private Configuracoes(){}
+ private Configurations(){}
 
     /**
      *
      * @return
      */
-    public static Configuracoes getInstancia(){
+    public static Configurations getInstancia(){
         if (instancia == null){
-            instancia = new Configuracoes();
+            instancia = new Configurations();
         }
         return instancia;
  
@@ -50,7 +50,7 @@ public class Configuracoes {
          this.ownerAtual = ownerAtual;
          baseDeDados.InsertIntoOwners(ownerAtual);
      } catch (BancoDAOExcepiton ex) {
-        // Logger.getLogger(Configuracoes.class.getName()).log(Level.SEVERE, null, ex);
+        // Logger.getLogger(Configurations.class.getName()).log(Level.SEVERE, null, ex);
      }
         
     }
@@ -140,9 +140,14 @@ public class Configuracoes {
                     coluna.setTamanhoMedioEstimado(Double.parseDouble(coluna.getData_length()) / 2);
                 }
             } catch (BancoDAOExcepiton ex) {
-                Logger.getLogger(Configuracoes.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Configurations.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+    }
+
+   public void InsertIntoOwners() throws BancoDAOExcepiton {
+      IBancoDAO base = getBaseDeDados();
+      base.InsertIntoOwners(ownerAtual);
     }
 
 

@@ -379,7 +379,7 @@ public class EstimationForm extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     public void populaOsCamposInicias() {
-        Configuracoes conf = Configuracoes.getInstancia();
+        Configurations conf = Configurations.getInstancia();
         jLabel1.setText(conf.getOwnerAtual().getNome());
         populaLista();
         tabelaColunasIniciais();
@@ -390,7 +390,7 @@ public class EstimationForm extends javax.swing.JFrame {
         try {
             DefaultListModel model = new DefaultListModel();
 
-            Configuracoes conf = Configuracoes.getInstancia();
+            Configurations conf = Configurations.getInstancia();
             IBancoDAO base = conf.getBaseDeDados();
             IOwner owner = (IOwner) conf.getOwnerAtual();
             ArrayList<ITable> buscaDadosOwner = base.buscaListaDeTabelasDoOwner(owner);
@@ -453,7 +453,7 @@ public class EstimationForm extends javax.swing.JFrame {
         tabelaColunasIniciais();
         try {
 
-            Configuracoes conf = Configuracoes.getInstancia();
+            Configurations conf = Configurations.getInstancia();
             IBancoDAO base = conf.getBaseDeDados();
             for (ITable t : conf.getOwnerAtual().getListaDeTabelas()) {
                 ArrayList<IColumn> buscaListaDeTabelasDoOwnerComOsDados = base.buscaListaDeTabelasDoOwnerComOsDados(conf.getOwnerAtual(), t);
@@ -481,7 +481,7 @@ public class EstimationForm extends javax.swing.JFrame {
         ITable tabela = (ITable) jList1.getSelectedValue();
         if (tabela != null) {
             DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-            Configuracoes conf = Configuracoes.getInstancia();
+            Configurations conf = Configurations.getInstancia();
 
             for (int i = 0; i < model.getRowCount(); i++) {
                 IColumn colunaDaTabela = conf.getColunaDaTabela(tabela, (String) model.getValueAt(i, 0));

@@ -123,7 +123,7 @@ public class OwnerSelectionForm extends javax.swing.JFrame {
 
         IOwner o = (IOwner) jComboBox1.getSelectedItem();
 
-        Configuracoes conf = Configuracoes.getInstancia();
+        Configurations conf = Configurations.getInstancia();
         conf.setOwnerAtual(o);
         EstimationForm ef = new EstimationForm();
         ef.setVisible(true);
@@ -193,7 +193,7 @@ public class OwnerSelectionForm extends javax.swing.JFrame {
     public void populaAComboBox() {
         try {
             DefaultComboBoxModel model = new DefaultComboBoxModel();
-            Configuracoes conf = Configuracoes.getInstancia();
+            Configurations conf = Configurations.getInstancia();
             IBancoDAO base = conf.getBaseDeDados();
             ArrayList<IOwner> buscaDadosOwner = base.buscaListaDeOwners();
             for (int i = 0; i < buscaDadosOwner.size(); i++) {
@@ -211,7 +211,7 @@ public class OwnerSelectionForm extends javax.swing.JFrame {
 
         try {
             DefaultListModel model = new DefaultListModel();
-            Configuracoes conf = Configuracoes.getInstancia();
+            Configurations conf = Configurations.getInstancia();
             IBancoDAO base = conf.getBaseDeDados();
             IOwner owner = (IOwner) jComboBox1.getSelectedItem();
             ArrayList<ITable> buscaDadosOwner = base.buscaListaDeTabelasDoOwner(owner);

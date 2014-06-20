@@ -148,7 +148,7 @@ public class LoginForm extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         BancoDAO novaConexao = null;
-        Configuracoes config = Configuracoes.getInstancia();        
+        Configurations config = Configurations.getInstancia();        
         try {
             novaConexao = new BancoDAO(jt_user.getText(), jt_pass.getText(), jt_host.getText(), jt_port.getText(), jt_sid.getText());
             novaConexao.testaConexao();

@@ -429,11 +429,37 @@ public class BancoDAO implements IBancoDAO {
                             + "T_OWNER('" + owner.getNome() + "', NULL)"
                             + ")");
                 } catch (SQLException ex) {
+                      System.out.println(ex.getMessage());
                 }
                 sta.close();
             }
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
+    }
+    
+    
+    
+    private String executeScript(String executeScript) throws BancoDAOExcepiton {
+        String result = "";
+        try {
+
+            try (Connection con = getConnection()) {
+                Statement sta = con.createStatement();
+                ResultSet res = sta.executeQuery(executeScript);
+                result = res.getNString(0);
+                res.close();
+
+                sta.close();
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return result;
+
+
+        
+      
+   
     }
 }
