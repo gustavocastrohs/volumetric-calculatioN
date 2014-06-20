@@ -35,4 +35,6 @@ public interface ITable {
     public int getTempoDeRetencao();
 
     public void setTempoDeRetencao(int tempoDeRetencao);
+
+    public void addColumn(IColumn column);
 }

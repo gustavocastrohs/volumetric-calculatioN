@@ -65,5 +65,20 @@ public class Owner implements IOwner{
         
         this.listaDeTabelas = listaDeTabelas;
     }
-    
+
+    @Override
+    public void alterTable(ITable table) {
+        for (int i = 0;i<listaDeTabelas.size();i++){
+        ITable t = (ITable) listaDeTabelas.get(i);
+            if (t.getTable_name().equalsIgnoreCase(table.getTable_name())) {
+                //t.setListaDeColunas(table.getListaDeColunas());
+                t.setNumeroEstimadoDeLinhasInicias(table.getNumeroEstimadoDeLinhasInicias());
+                t.setPercentualDeCrescimento(table.getPercentualDeCrescimento());
+                t.setTempoDeRetencao(table.getTempoDeRetencao());
+
+            }
+        }
+    }
+
+
 }

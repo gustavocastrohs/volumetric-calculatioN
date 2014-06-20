@@ -17,9 +17,9 @@ import java.util.ArrayList;
 public class Table implements ITable{
     private String table_name;
     private ArrayList<IColumn> listaDeColunas;
-    private int numeroEstimadoDeLinhasInicias;
-    private double percentualDeCrescimento;
-    private int tempoDeRetencao;
+    private int numeroEstimadoDeLinhasInicias = 5000;
+    private double percentualDeCrescimento= 10.00;
+    private int tempoDeRetencao = 5;
     
     public Table(String table_name) {
         this.table_name = table_name;
@@ -74,6 +74,11 @@ public class Table implements ITable{
 
     public void setTempoDeRetencao(int tempoDeRetencao) {
         this.tempoDeRetencao = tempoDeRetencao;
+    }
+
+    @Override
+    public void addColumn(IColumn column) {
+        listaDeColunas.add(column);
     }
 
  

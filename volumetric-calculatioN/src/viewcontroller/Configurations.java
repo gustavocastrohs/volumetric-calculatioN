@@ -20,7 +20,7 @@ import model.ITable;
  * @author 10109144
  */
 public class Configurations {
- private static Configurations instancia;
+private static Configurations instancia;
  
  private Configurations(){}
 
@@ -35,30 +35,30 @@ public class Configurations {
         return instancia;
  
  }
+   
+    private IBancoDAO baseDeDados;
+    private IOwner currentOwner;
+    private String userLoggedIn;
+
     
-    private  IBancoDAO baseDeDados;
-    private IOwner ownerAtual;
-    private String usuarioLogado;
-    
-    
-    public IOwner getOwnerAtual() {
-        return ownerAtual;
+    public IOwner getCurrentOwner() {
+        return currentOwner;
     }
 
-    public void setOwnerAtual(IOwner ownerAtual) {
+    public void setCurrentOwner(IOwner currentOwner) {
     
-         this.ownerAtual = ownerAtual;
+         this.currentOwner = currentOwner;
       
 
         
     }
 
     public String getUsuarioLogado() {
-        return usuarioLogado;
+        return userLoggedIn;
     }
 
     public void setUsuarioLogado(String usuarioLogado) {
-        this.usuarioLogado = usuarioLogado;
+        this.userLoggedIn = usuarioLogado;
     }
 
     public IBancoDAO getBaseDeDados() {
@@ -71,14 +71,14 @@ public class Configurations {
     
     public void setTabelasOwner (ArrayList<ITable> tabelas){
     
-    this.ownerAtual.setListaDeTabelas(tabelas);
+    this.currentOwner.setListaDeTabelas(tabelas);
     setListaDeTabelasAlterandoSeuValor(tabelas);
              
     }
     
     public ITable getOwnerTable(String tabela) {
         ITable retorno = null;
-        for (ITable t : ownerAtual.getListaDeTabelas()) {
+        for (ITable t : currentOwner.getListaDeTabelas()) {
             if (t.getTable_name().equalsIgnoreCase(tabela)) {
                 return t;
             }
@@ -113,11 +113,7 @@ public class Configurations {
 
         return retorno;
     }
-    
-    public void setIColumnDaTabela(ArrayList<IColumn> buscaListaDeTabelasDoOwnerComOsDados,ITable t){
-        
-    
-    }
+
     
     
         
@@ -130,7 +126,7 @@ public class Configurations {
         IBancoDAO base = getBaseDeDados();
         for (ITable tabela : listaDeTabelas) {           
             try {
-                tabela.setListaDeColunas(base.buscaListaDeTabelasDoOwnerComOsDados(getOwnerAtual(), tabela));
+                tabela.setListaDeColunas(base.buscaListaDeTabelasDoOwnerComOsDados(getCurrentOwner(), tabela));
                 for (IColumn coluna : tabela.getListaDeColunas()) {
                     if (coluna.getNullable().equalsIgnoreCase("Y")) {
                         coluna.setPercentualDeLinhasNulas(50.00);
@@ -145,7 +141,22 @@ public class Configurations {
 
    public void InsertIntoOwners() throws BancoDAOExcepiton {
       IBancoDAO base = getBaseDeDados();
-      base.InsertIntoOwners(ownerAtual);
+      base.InsertIntoOwners(currentOwner);
+    }
+
+    public void alterTable(ITable table) {        
+    
+       currentOwner.alterTable(table);
+    }
+
+    public void addIColumnTableByList(ArrayList<IColumn> buscaListaDeTabelasDoOwnerComOsDados, ITable t) {
+      for (IColumn column : buscaListaDeTabelasDoOwnerComOsDados){
+          for (ITable table: currentOwner.getListaDeTabelas()){
+              if (column.getColumn_name().equalsIgnoreCase(table.getTable_name())){
+                  table.addColumn(column);
+              }
+          }
+      }
     }
 
 

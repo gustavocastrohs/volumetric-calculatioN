@@ -27,4 +27,6 @@ public interface IOwner {
 
     public void setListaDeTabelas(ArrayList<ITable> listaDeTabelas);
 
+    public void alterTable(ITable table);
+
 }

@@ -29,8 +29,10 @@ public class EstimationForm extends javax.swing.JFrame {
      */
     public EstimationForm() {
         initComponents();
+        
         this.setLocationRelativeTo(null);
         modelTabela = (DefaultTableModel) jTable1.getModel();
+        populaOsCamposInicias();
     }
 
     /**
@@ -289,18 +291,18 @@ public class EstimationForm extends javax.swing.JFrame {
 
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
         // TODO add your handling code here:
-        populaOsCamposInicias();
+     
     }//GEN-LAST:event_formWindowActivated
 
     private void jList1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jList1MouseClicked
         // TODO add your handling code here:
-
+        setaNomeDaTabelaNaLabel();
+        populaTabelaComDadosDaITable();
     }//GEN-LAST:event_jList1MouseClicked
 
     private void jList1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jList1MouseReleased
         // TODO add your handling code here:
-        setaNomeDaTabelaNaLabel();
-        populaTabelaComDadosDaITable();
+
     }//GEN-LAST:event_jList1MouseReleased
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
@@ -312,10 +314,10 @@ public class EstimationForm extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
         boolean salvaDadosDaTabela = salvaDadosDaTabela();
-        if (salvaDadosDaTabela){
-        JOptionPane.showMessageDialog(this, "Tabela Salva");
-        }else{
-        JOptionPane.showMessageDialog(this, "Selecione uma tabela");
+        if (salvaDadosDaTabela) {
+            JOptionPane.showMessageDialog(this, "Tabela Salva");
+        } else {
+            JOptionPane.showMessageDialog(this, "Selecione uma tabela");
         }
     }//GEN-LAST:event_jButton3ActionPerformed
 
@@ -378,9 +380,10 @@ public class EstimationForm extends javax.swing.JFrame {
     private javax.swing.JTextField jtf_tempoDeRetencao;
     // End of variables declaration//GEN-END:variables
 
+    private  Configurations conf = Configurations.getInstancia();
     public void populaOsCamposInicias() {
-        Configurations conf = Configurations.getInstancia();
-        jLabel1.setText(conf.getOwnerAtual().getNome());
+       
+        jLabel1.setText(conf.getCurrentOwner().getNome());
         populaLista();
         tabelaColunasIniciais();
     }
@@ -390,13 +393,13 @@ public class EstimationForm extends javax.swing.JFrame {
         try {
             DefaultListModel model = new DefaultListModel();
 
-            Configurations conf = Configurations.getInstancia();
+           
             IBancoDAO base = conf.getBaseDeDados();
-            IOwner owner = (IOwner) conf.getOwnerAtual();
+            IOwner owner = (IOwner) conf.getCurrentOwner();
             ArrayList<ITable> buscaDadosOwner = base.buscaListaDeTabelasDoOwner(owner);
             conf.setTabelasOwner(buscaDadosOwner);
-            for (int i = 0; i < conf.getOwnerAtual().getListaDeTabelas().size(); i++) {
-                model.addElement(conf.getOwnerAtual().getListaDeTabelas().get(i));
+            for (int i = 0; i < conf.getCurrentOwner().getListaDeTabelas().size(); i++) {
+                model.addElement(conf.getCurrentOwner().getListaDeTabelas().get(i));
             }
 
             jList1.setModel(model);
@@ -408,7 +411,7 @@ public class EstimationForm extends javax.swing.JFrame {
     private DefaultTableModel modelTabela;
 
     public void tabelaColunasIniciais() {
-    
+       
         jTable1.setModel(modelTabela);
     }
 
@@ -430,23 +433,33 @@ public class EstimationForm extends javax.swing.JFrame {
         for (IColumn coluna : tabela.getListaDeColunas()) {
 
             model.addRow(new Object[]{coluna.getColumn_name(), coluna.getData_type(), coluna.getData_length(), coluna.getData_precision(), coluna.getNullable(), coluna.getTamanhoMedioEstimado(), coluna.getPercentualDeLinhasNulas()});
-            jTable1.setModel(model);
-        }
 
+        }
+        populaDadosNosTextFild(tabela);
+        jTable1.setModel(model);
+
+
+
+    }
+public void populaDadosNosTextFild(ITable table) {
+        jtf_numeroEstimadoDeLinhasIniciais.setText("" + table.getNumeroEstimadoDeLinhasInicias());
+        jtf_crescimentoEsperado.setText("" + table.getPercentualDeCrescimento());
+        jtf_tempoDeRetencao.setText("" + table.getTempoDeRetencao());
     }
 
     public void populaDadosInciaisComDados() {
         tabelaColunasIniciais();
         try {
 
-            Configurations conf = Configurations.getInstancia();
+         
             IBancoDAO base = conf.getBaseDeDados();
-            for (ITable t : conf.getOwnerAtual().getListaDeTabelas()) {
-                ArrayList<IColumn> buscaListaDeTabelasDoOwnerComOsDados = base.buscaListaDeTabelasDoOwnerComOsDados(conf.getOwnerAtual(), t);
-                conf.setIColumnDaTabela(buscaListaDeTabelasDoOwnerComOsDados, t);
+            for (ITable t : conf.getCurrentOwner().getListaDeTabelas()) {
+                ArrayList<IColumn> buscaListaDeTabelasDoOwnerComOsDados = base.buscaListaDeTabelasDoOwnerComOsDados(conf.getCurrentOwner(), t);
+                conf.addIColumnTableByList(buscaListaDeTabelasDoOwnerComOsDados, t);
             }
 
         } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
 
@@ -458,55 +471,70 @@ public class EstimationForm extends javax.swing.JFrame {
 
     }
 
-    private IColumn buscaColunaASerEditada(String coluna, String tabela) {
-
-        return null;
-    }
-
     public boolean salvaDadosDaTabela() {
         ITable tabela = (ITable) jList1.getSelectedValue();
+        
         if (tabela != null) {
             DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-            Configurations conf = Configurations.getInstancia();
 
             for (int i = 0; i < model.getRowCount(); i++) {
                 IColumn colunaDaTabela = conf.getColunaDaTabela(tabela, (String) model.getValueAt(i, 0));
                 Object tamanhoMedio = model.getValueAt(i, 5);
-                if (tamanhoMedio!=null)
+                if (tamanhoMedio != null) {
                     colunaDaTabela.setTamanhoMedioEstimado(Double.parseDouble(tamanhoMedio.toString()));
-               Object percetualDeLinhasNulas=model.getValueAt(i, 6);
-                if (percetualDeLinhasNulas!=null)
-                colunaDaTabela.setPercentualDeLinhasNulas(Double.parseDouble(percetualDeLinhasNulas.toString()));
+                }
+                Object percetualDeLinhasNulas = model.getValueAt(i, 6);
+                if (percetualDeLinhasNulas != null) {
+                    colunaDaTabela.setPercentualDeLinhasNulas(Double.parseDouble(percetualDeLinhasNulas.toString()));
+                }
 
             }
+            try {
 
-            if (!jtf_numeroEstimadoDeLinhasIniciais.getText().equalsIgnoreCase("")) {
                 tabela.setNumeroEstimadoDeLinhasInicias(Integer.parseInt(jtf_numeroEstimadoDeLinhasIniciais.getText()));
-            }
-            if (!jtf_crescimentoEsperado.getText().equalsIgnoreCase("")) {
-                tabela.setPercentualDeCrescimento(Integer.parseInt(jtf_crescimentoEsperado.getText()));
-            }
-            if (!jtf_tempoDeRetencao.getText().equalsIgnoreCase("")) {
+
+                tabela.setPercentualDeCrescimento(Double.parseDouble(jtf_crescimentoEsperado.getText()));
+
                 int parseInt = Integer.parseInt(jtf_tempoDeRetencao.getText());
-                if (parseInt > 5) {
+
+                if (parseInt >= 5) {
                     tabela.setTempoDeRetencao(parseInt);
                 } else {
-                    tabela.setTempoDeRetencao(5);
+                    JOptionPane.showMessageDialog(this, "Tempo de retenção minimo é de 5 anos");
+                    return false;
                 }
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "Entrada inserida é invalida");
+                return false;
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, e.getMessage());
+                return false;
             }
-            else {
-                    tabela.setTempoDeRetencao(5);
-                }
-            jtf_numeroEstimadoDeLinhasIniciais.setText("");
-            jtf_crescimentoEsperado.setText("");
-            jtf_tempoDeRetencao.setText("");
-                    
+            conf.alterTable(tabela);
+            refreshLista();
             return true;
-        } else {
-            return false;
-            
         }
-        
+        return false;
+
     }
 
+  public void refreshLista() {
+
+    
+            DefaultListModel model = new DefaultListModel();
+            jList1.setModel(model);
+          
+            
+            IOwner owner = (IOwner) conf.getCurrentOwner();
+            
+            for (int i = 0; i < conf.getCurrentOwner().getListaDeTabelas().size(); i++) {
+                model.addElement(conf.getCurrentOwner().getListaDeTabelas().get(i));
+            }
+            
+
+            jList1.setModel(model);
+            jTable1.setModel(modelTabela);
+            
+    }  
+      
 }

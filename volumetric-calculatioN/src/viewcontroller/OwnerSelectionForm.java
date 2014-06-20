@@ -124,7 +124,7 @@ public class OwnerSelectionForm extends javax.swing.JFrame {
         IOwner o = (IOwner) jComboBox1.getSelectedItem();
 
         Configurations conf = Configurations.getInstancia();
-        conf.setOwnerAtual(o);
+        conf.setCurrentOwner(o);
         EstimationForm ef = new EstimationForm();
         ef.setVisible(true);
         setVisible(false);
