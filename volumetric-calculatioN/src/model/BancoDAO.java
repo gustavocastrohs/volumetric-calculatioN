@@ -420,15 +420,18 @@ public class BancoDAO implements IBancoDAO {
     
     @Override
     public void InsertIntoOwners(IOwner owner) throws BancoDAOExcepiton {
-
+        VolumetricCalc vc = new VolumetricCalc();
         try {
             try (Connection con = getConnection()) {
                 Statement sta = con.createStatement();
                 try {
+                    sta.execute(vc.insert(owner));
+                    /*
                     sta.execute(
                             "INSERT INTO owners VALUES ("
                             + "T_OWNER('" + owner.getNome() + "', NULL)"
                             + ")");
+                    */
                 } catch (SQLException ex) {
                       System.out.println(ex.getMessage());
                 }
@@ -463,4 +466,5 @@ public class BancoDAO implements IBancoDAO {
       
    
     }
+   
 }

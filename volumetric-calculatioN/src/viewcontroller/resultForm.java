@@ -6,11 +6,7 @@
 
 package viewcontroller;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import model.BancoDAO;
 import model.BancoDAOExcepiton;
-import model.IOwner;
 
 /**
  *
@@ -24,6 +20,7 @@ public class resultForm extends javax.swing.JFrame {
     public resultForm() {
         initComponents();
     this.setLocationRelativeTo(null);
+    addOwner();
     }
 
     /**
