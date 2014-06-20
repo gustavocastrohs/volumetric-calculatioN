@@ -252,9 +252,6 @@ public class BancoDAO implements IBancoDAO {
         ResultSet res = sta.executeQuery(sql);
 
         while (res.next()) {
-            //DROP EM TODAS AS TABELAS DO BANCO
-            dropAllTables();
-            createAllTables();
             break;
         }
         res.close();
@@ -265,14 +262,16 @@ public class BancoDAO implements IBancoDAO {
     
     public void dropAllTables() throws BancoDAOExcepiton {
 
-        String sql1, sql2, sql3, sql4, sql5, sql6;
-
-        sql1 = adicionaHeaderDropTable("TYPE T_OWNER");
-        sql2 = adicionaHeaderDropTable("TYPE T_TABLES");
-        sql3 = adicionaHeaderDropTable("TYPE T_TABLE");
-        sql4 = adicionaHeaderDropTable("TYPE NEXTS_EST");
-        sql5 = adicionaHeaderDropTable("TYPE T_COLUMNS");
-        sql6 = adicionaHeaderDropTable("TYPE T_COLUMN");
+        String sql1, sql2, sql3, sql4, sql5, sql6,sql7;
+       
+        sql1 = adicionaHeaderDropTable("TABLE OWNERS ");
+        sql2 = adicionaHeaderDropTable("TYPE T_OWNER ");
+        sql3 = adicionaHeaderDropTable("TYPE T_TABLES ");
+        sql4 = adicionaHeaderDropTable("TYPE T_TABLE ");
+        sql5 = adicionaHeaderDropTable("TYPE NEXTS_EST ");
+        sql6 = adicionaHeaderDropTable("TYPE T_COLUMNS ");
+        sql7 = adicionaHeaderDropTable("TYPE T_COLUMN ");
+       
 
         ArrayList<String> l = new ArrayList<String>();
         l.add(sql1);
@@ -281,6 +280,7 @@ public class BancoDAO implements IBancoDAO {
         l.add(sql4);
         l.add(sql5);
         l.add(sql6);
+        l.add(sql7);
 
         try {
 
@@ -288,30 +288,29 @@ public class BancoDAO implements IBancoDAO {
                 Statement sta = con.createStatement();
 
                 for (String s : l) {
-
                     try {
                         sta.execute(s);
                     } catch (SQLException ex) {
+                          System.out.println(s);
+                          System.out.println(ex.getMessage());
                         continue;
-
                     }
-
                 }
                 sta.close();
             }
         } catch (SQLException ex) {
-            //   System.out.println(ex.getMessage());
+              System.out.println(ex.getMessage());
         }
 
     }
 
     private String adicionaHeaderDropTable(String tabela) {
 
-        String saida = "DROP  " + tabela + "  force";
+        String saida = "DROP  " + tabela + "force" ;
         return saida;
     }
 
-    private void createAllTables() throws BancoDAOExcepiton {
+    public void createAllTables() throws BancoDAOExcepiton {
 
         String s1, s2, s3, s4, s5, s6, s7;
 
@@ -343,6 +342,8 @@ public class BancoDAO implements IBancoDAO {
                         sta.execute(s);
 
                     } catch (SQLException ex) {
+                        System.out.println(s);
+                        System.out.println(ex.getMessage());
                         continue;
 
                     }

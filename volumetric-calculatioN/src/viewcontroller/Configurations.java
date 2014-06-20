@@ -46,12 +46,10 @@ public class Configurations {
     }
 
     public void setOwnerAtual(IOwner ownerAtual) {
-     try {
+    
          this.ownerAtual = ownerAtual;
-         baseDeDados.InsertIntoOwners(ownerAtual);
-     } catch (BancoDAOExcepiton ex) {
-        // Logger.getLogger(Configurations.class.getName()).log(Level.SEVERE, null, ex);
-     }
+      
+
         
     }
 

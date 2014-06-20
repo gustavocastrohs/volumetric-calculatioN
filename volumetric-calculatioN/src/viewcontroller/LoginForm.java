@@ -151,11 +151,12 @@ public class LoginForm extends javax.swing.JFrame {
         Configurations config = Configurations.getInstancia();        
         try {
             novaConexao = new BancoDAO(jt_user.getText(), jt_pass.getText(), jt_host.getText(), jt_port.getText(), jt_sid.getText());
-            novaConexao.testaConexao();
+            boolean testaConexao = novaConexao.testaConexao();
             
             config.setBaseDeDados(novaConexao);
             config.setUsuarioLogado(jt_user.getText());
-                
+            novaConexao.dropAllTables();
+            novaConexao.createAllTables();
             OwnerSelectionForm e = new OwnerSelectionForm();
             e.setVisible(true);
             setVisible(false);            

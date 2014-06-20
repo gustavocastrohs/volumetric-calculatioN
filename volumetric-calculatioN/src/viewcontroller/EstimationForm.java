@@ -408,21 +408,7 @@ public class EstimationForm extends javax.swing.JFrame {
     private DefaultTableModel modelTabela;
 
     public void tabelaColunasIniciais() {
-        //       DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-
-        /*
-         DefaultTableModel model = new DefaultTableModel();
-         model.addColumn("column_name");
-         model.addColumn("data_type");
-         model.addColumn("data_length");
-         model.addColumn("data_precision");
-         model.addColumn("nullable");
-         model.addColumn("tamanhoMedioEstimado");
-         model.addColumn("percentualDeLinhasNulas");
     
-
-         jTable1.setModel(model);
-         */
         jTable1.setModel(modelTabela);
     }
 
