@@ -21,22 +21,36 @@ public class VolumetricCalc {
                 + generateTables(owner)
                 + " ))"
                 + "  )";
+      //  System.out.println(procedure);
         return procedure;
 
     }
 
     private String generateTables(IOwner owner) {
         String tabelas = "";
-        for (ITable t : owner.getListaDeTabelas()) {
-            tabelas =""+ generateTable(t);
+        for (int i = 0; i < owner.getListaDeTabelas().size(); i++) {
+        
+        ITable t =     owner.getListaDeTabelas().get(i);       
+            tabelas = tabelas + "T_TABLE(" + generateTable(t) + ")";
+            if (owner.getListaDeTabelas().size() > 0) {
+                if (i < owner.getListaDeTabelas().size() - 1) {
+                    tabelas = tabelas + ",";
+                }
+            }
         }
-        return "T_TABLE(" + tabelas + ")";
+        return tabelas;
     }
 
     private String generateTable(ITable table) {
         String tabelaString = "";
-        for (IColumn c : table.getListaDeColunas()) {
-        tabelaString =""+ generateColumns(c);
+        for (int i = 0; i < table.getListaDeColunas().size(); i++) {
+            IColumn c = (IColumn)table.getListaDeColunas().get(i);
+            tabelaString = tabelaString + generateColumns(c);
+            if (table.getListaDeColunas().size() > 0) {
+                if (i < table.getListaDeColunas().size()-1) {
+                    tabelaString = tabelaString + ",";
+                }
+            }
         }
         return "'"
                 +table.getTable_name()
@@ -55,10 +69,10 @@ public class VolumetricCalc {
     }
 
     private String generateColumns(IColumn coluna) {
-        return "TCOLUMN(" + coluna.getColumn_name()
-                + "," 
+        return "T_COLUMN('" + coluna.getColumn_name()
+                + "','" 
                 +coluna.getData_type() 
-                + "," 
+                + "'," 
                 +coluna.getData_length()
                 + ",'"                 
                 +coluna.getNullable()

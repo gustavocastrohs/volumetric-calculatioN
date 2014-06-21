@@ -20,7 +20,7 @@ public class resultForm extends javax.swing.JFrame {
     public resultForm() {
         initComponents();
     this.setLocationRelativeTo(null);
-    addOwner();
+    addOwnerOnDataBase();
     }
 
     /**
@@ -169,7 +169,7 @@ public class resultForm extends javax.swing.JFrame {
     private javax.swing.JTextArea jTextArea1;
     // End of variables declaration//GEN-END:variables
 
-private void addOwner(){
+private void addOwnerOnDataBase(){
 Configurations conf = Configurations.getInstancia();
         try {
             conf.InsertIntoOwners();
